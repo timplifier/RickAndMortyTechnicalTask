@@ -1,4 +1,4 @@
-package com.timplifier.main.presentation.ui.fragments.characters
+package com.timplifier.main.presentation.ui.fragments.main.characters
 
 import com.timplifier.core.base.BaseViewModel
 import com.timplifier.domain.useCases.FetchCharactersUseCase

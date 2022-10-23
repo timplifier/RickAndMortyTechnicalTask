@@ -1,4 +1,4 @@
-package com.timplifier.main.presentation.ui.fragments.characters
+package com.timplifier.main.presentation.ui.fragments.main.characters
 
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
