@@ -2,12 +2,12 @@ package com.timplifier.data.remote
 
 import com.timplifier.data.remote.apiservices.CharactersApiService
 import retrofit2.Retrofit
+import javax.inject.Inject
 
-class NetworkClient {
+class NetworkClient @Inject constructor() {
     private val retrofit =
         provideRetrofit(
-            provideOkHttpClientBuilder().apply {
-            }.build()
+            provideOkHttpClientBuilder().build()
         )
 
     fun generateCharactersApiService(): CharactersApiService = retrofit.createAnApi()
