@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
     app:startDestination="@id/charactersFragment">
+
     <fragment
         android:id="@+id/charactersFragment"
-        android:name="com.timplifier.main.presentation.ui.fragments.characters.CharactersFragment"
-        android:label="CharactersFragment" />
+        android:name="com.timplifier.main.presentation.ui.fragments.main.characters.CharactersFragment"
+        android:label="CharactersFragment"
+        tools:layout="@layout/fragment_characters" />
 </navigation>
