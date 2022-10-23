@@ -62,7 +62,7 @@ firebaseCloudMessaging = "23.0.5"
 firebaseInAppMessaging = "20.1.2"
 firebaseAdMob = "21.0.0"
 #Glide
-glide = "4.13.0"
+glide = "4.14.2"
 #Koin
 koin = "3.2.2"
 [libraries]
@@ -171,7 +171,7 @@ koin-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.
 
 [bundles]
 #UI Components
-uiComponents = ["ui-activity", "ui-fragment", "ui-appCompat", "ui-constraint", "ui-material", "ui-viewBindingPropertyDelegate", "glide-glide", "ui-splashScreen"]
+uiComponents = ["ui-activity", "ui-fragment", "ui-appCompat", "ui-constraint", "ui-material", "ui-viewBindingPropertyDelegate", "ui-splashScreen"]
 
 #Coroutines
 coroutines = ["coroutines-core", "coroutines-android"]
