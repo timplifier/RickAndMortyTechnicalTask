@@ -12,4 +12,14 @@ class CharactersFragment :
     BaseFragment<FragmentCharactersBinding, CharactersViewModel>(R.layout.fragment_characters) {
     override val binding by viewBinding(FragmentCharactersBinding::bind)
     override val viewModel by viewModels<CharactersViewModel>()
+
+    override fun launchObservers() {
+        subscribeToCharacters()
+    }
+
+    private fun subscribeToCharacters() {
+        viewModel.fetchCharacters().spectatePaging {
+
+        }
+    }
 }
