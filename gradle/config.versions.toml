@@ -1,0 +1,6 @@
+[versions]
+compileSdk = "32"
+minSdk = "23"
+targetSdk = "32"
+releaseBuildType = "release"
+debugBuildType = "debug"
