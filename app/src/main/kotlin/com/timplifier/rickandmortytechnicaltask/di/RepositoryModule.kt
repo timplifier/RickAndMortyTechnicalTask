@@ -2,6 +2,7 @@ package com.timplifier.rickandmortytechnicaltask.di
 
 import com.timplifier.data.repositories.CharactersRepositoryImpl
 import com.timplifier.domain.repository.CharactersRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +14,6 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
 
     @Singleton
-    @Provides
+    @Binds
     abstract fun bindCharactersRepository(charactersRepositoryImpl: CharactersRepositoryImpl): CharactersRepository
 }
