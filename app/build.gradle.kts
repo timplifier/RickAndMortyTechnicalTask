@@ -34,7 +34,7 @@ android {
         getByName(config.versions.releaseBuildType.get()) {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
         getByName(config.versions.debugBuildType.get()) {
@@ -57,6 +57,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":features:main"))
+
     // UI Components
     implementation(libs.bundles.uiComponents)
 
