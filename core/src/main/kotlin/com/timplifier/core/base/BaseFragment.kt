@@ -13,6 +13,7 @@ import androidx.paging.PagingData
 import androidx.viewbinding.ViewBinding
 import com.geektechkb.core.ui.state.UIState
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.timplifier.common.either.Either
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -67,23 +68,13 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
             collect {
                 gatherIfSucceed?.invoke(it)
                 when (it) {
-                    is UIState.Idle -> {
-                        idle?.invoke(it)
-                    }
-                    is UIState.Loading -> {
-                        loading?.invoke(it)
-                    }
-                    is UIState.Error -> {
-                        error?.invoke(it.error)
-                    }
-                    is UIState.Success -> {
-                        success?.invoke(it.data)
-                    }
+                    is UIState.Idle -> idle?.invoke(it)
+                    is UIState.Loading -> loading?.invoke(it)
+                    is UIState.Error -> error?.invoke(it.error)
+                    is UIState.Success -> success?.invoke(it.data)
                 }
             }
-
         }
-
     }
 
     fun safeFlowGather(
@@ -93,6 +84,20 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(lifecycleState) {
                 gather()
+            }
+        }
+    }
+
+    fun <T> Flow<Either<String, T>>.safeFlowGather(
+        actionIfEitherIsRight: suspend (T) -> Unit,
+        actionIfEitherIsLeft: (error: String) -> Unit,
+    ) {
+        safeFlowGather {
+            collect {
+                when (it) {
+                    is Either.Right -> actionIfEitherIsRight(it.value)
+                    is Either.Left -> actionIfEitherIsLeft(it.value)
+                }
             }
         }
     }
@@ -107,24 +112,16 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
             loader.isVisible = isDisplayed
         }
         when (this) {
-            is UIState.Idle -> {
-
-            }
-            is UIState.Loading -> {
-                displayLoader(true)
-            }
-            is UIState.Error -> {
-                displayLoader(false)
-            }
+            is UIState.Idle -> {}
+            is UIState.Loading -> displayLoader(true)
+            is UIState.Error -> displayLoader(false)
             is UIState.Success -> {
                 if (navigationSucceed) {
                     displayLoader(true)
                 } else {
                     displayLoader(false)
                 }
-
             }
         }
-
     }
 }
