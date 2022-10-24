@@ -1,6 +1,7 @@
 package com.timplifier.data.remote
 
-import com.timplifier.data.remote.apiservices.CharactersApiService
+import com.timplifier.data.remote.apiservices.CharacterApiService
+import com.timplifier.data.remote.apiservices.EpisodeApiService
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -10,7 +11,9 @@ class NetworkClient @Inject constructor() {
             provideOkHttpClientBuilder().build()
         )
 
-    fun generateCharactersApiService(): CharactersApiService = retrofit.createAnApi()
+    fun generateCharacterApiService(): CharacterApiService = retrofit.createAnApi()
+
+    fun generateEpisodeApiService(): EpisodeApiService = retrofit.createAnApi()
 }
 
-inline fun <reified T : Any> Retrofit.createAnApi(): T = create(T::class.java)
+private inline fun <reified T : Any> Retrofit.createAnApi(): T = create(T::class.java)
