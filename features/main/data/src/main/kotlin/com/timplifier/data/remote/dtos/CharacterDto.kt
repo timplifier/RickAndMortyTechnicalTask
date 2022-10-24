@@ -3,7 +3,7 @@ package com.timplifier.data.remote.dtos
 
 import com.google.gson.annotations.SerializedName
 import com.timplifier.data.utils.DataMapper
-import com.timplifier.domain.models.CharactersModel
+import com.timplifier.domain.models.CharacterModel
 
 data class CharacterDto(
     @SerializedName("id")
@@ -30,9 +30,9 @@ data class CharacterDto(
     val url: String,
     @SerializedName("created")
     val created: String
-) : DataMapper<CharactersModel> {
+) : DataMapper<CharacterModel> {
 
-    override fun toDomain() = CharactersModel(
+    override fun toDomain() = CharacterModel(
         id,
         name,
         status,
