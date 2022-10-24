@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Rick And Morty Technical Task</string>
+    <string name="first_seen_in">First seen in:</string>
+    <string name="last_known_location">Last known location:</string>
+    <string name="character_status_and_species_with_hyphen">%1$s - %2$s</string>
 </resources>
