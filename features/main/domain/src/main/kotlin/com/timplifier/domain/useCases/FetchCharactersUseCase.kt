@@ -1,10 +1,10 @@
 package com.timplifier.domain.useCases
 
-import com.timplifier.domain.repository.CharactersRepository
+import com.timplifier.domain.repositories.CharacterRepository
 import javax.inject.Inject
 
 class FetchCharactersUseCase @Inject constructor(
-    private val charactersRepository: CharactersRepository
+    private val characterRepository: CharacterRepository
 ) {
-    operator fun invoke() = charactersRepository.fetchCharacters()
+    operator fun invoke() = characterRepository.fetchCharacters()
 }
