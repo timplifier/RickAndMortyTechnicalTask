@@ -1,13 +1,13 @@
 package com.timplifier.data.remote.pagingSources
 
 import com.timplifier.data.base.BasePagingSource
-import com.timplifier.data.remote.apiservices.CharactersApiService
+import com.timplifier.data.remote.apiservices.CharacterApiService
 import com.timplifier.data.remote.dtos.CharacterDto
-import com.timplifier.domain.models.CharactersModel
+import com.timplifier.domain.models.CharacterModel
 
 class CharactersPagingSource(
-    private val charactersApiService: CharactersApiService
+    private val characterApiService: CharacterApiService
 ) :
-    BasePagingSource<CharacterDto, CharactersModel>({
-        charactersApiService.fetchCharacters(it)
+    BasePagingSource<CharacterDto, CharacterModel>({
+        characterApiService.fetchCharacters(it)
     })
