@@ -2,11 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFlowFragment">
-
-
+    app:startDestination="@id/mainFlowFragment2">
     <fragment
-        android:id="@+id/mainFlowFragment"
+        android:id="@+id/mainFlowFragment2"
         android:name="com.timplifier.main.presentation.ui.fragments.main.MainFlowFragment"
         android:label="MainFlowFragment" />
 </navigation>
