@@ -1,8 +1,8 @@
 package com.timplifier.rickandmortytechnicaltask.di
 
-import com.timplifier.data.repositories.CharactersRepositoryImpl
+import com.timplifier.data.repositories.CharacterRepositoryImpl
 import com.timplifier.data.repositories.EpisodeRepositoryImpl
-import com.timplifier.domain.repositories.CharactersRepository
+import com.timplifier.domain.repositories.CharacterRepository
 import com.timplifier.domain.repositories.EpisodeRepository
 import dagger.Binds
 import dagger.Module
@@ -16,7 +16,7 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindCharactersRepository(charactersRepositoryImpl: CharactersRepositoryImpl): CharactersRepository
+    abstract fun bindCharactersRepository(charactersRepositoryImpl: CharacterRepositoryImpl): CharacterRepository
 
     @Singleton
     @Binds

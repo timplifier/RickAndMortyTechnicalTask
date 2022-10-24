@@ -1,4 +1,4 @@
-package com.timplifier.domain.repository
+package com.timplifier.domain.repositories
 
 import androidx.paging.PagingData
 import com.timplifier.domain.models.CharacterModel

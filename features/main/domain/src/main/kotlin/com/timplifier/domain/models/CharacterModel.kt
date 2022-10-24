@@ -1,6 +1,6 @@
 package com.timplifier.domain.models
 
-data class CharactersModel(
+data class CharacterModel(
     val id: Int,
     val name: String,
     val status: String,
