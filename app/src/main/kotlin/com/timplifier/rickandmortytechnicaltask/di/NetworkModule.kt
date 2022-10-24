@@ -14,5 +14,10 @@ object NetworkModule {
     @Singleton
     @Provides
     fun generateCharactersApiService(networkClient: NetworkClient) =
-        networkClient.generateCharactersApiService()
+        networkClient.generateCharacterApiService()
+
+    @Singleton
+    @Provides
+    fun generateEpisodeApiService(networkClient: NetworkClient) =
+        networkClient.generateEpisodeApiService()
 }
