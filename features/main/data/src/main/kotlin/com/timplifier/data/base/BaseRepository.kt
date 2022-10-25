@@ -2,8 +2,8 @@ package com.timplifier.data.base
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.timplifier.data.utils.DataMapper
 import com.timplifier.common.either.Either
+import com.timplifier.data.utils.DataMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -30,7 +30,7 @@ internal fun <ValueDto : DataMapper<Value>, Value : Any> makePagingRequest(
     enablePlaceholders: Boolean = true,
     initialLoadSize: Int = pageSize * 3,
     maxSize: Int = Int.MAX_VALUE,
-    jumpThreshold: Int = Int.MIN_VALUE
+    jumpThreshold: Int = Int.MIN_VALUE,
 ) =
     Pager(
         config = PagingConfig(
