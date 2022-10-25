@@ -1,7 +1,7 @@
 package com.timplifier.rickandmortytechnicaltask.presentation.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.timplifier.rickandmortytechnicaltask.R
 import dagger.hilt.android.AndroidEntryPoint
 

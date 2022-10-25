@@ -20,5 +20,5 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindEpisodeRepository(episodeRepositoryImpl: EpisodeRepositoryImpl)  : EpisodeRepository
+    abstract fun bindEpisodeRepository(episodeRepositoryImpl: EpisodeRepositoryImpl): EpisodeRepository
 }
