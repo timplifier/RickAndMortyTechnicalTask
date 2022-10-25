@@ -3,4 +3,16 @@
     <string name="first_seen_in">First seen in:</string>
     <string name="last_known_location">Last known location:</string>
     <string name="character_status_and_species_with_hyphen">%1$s - %2$s</string>
+    <string name="alien">Alien</string>
+    <string name="humanoid">Humanoid</string>
+    <string name="human">Human</string>
+    <string name="unknown">Unknown</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="gender">Gender</string>
+    <string name="species">Species</string>
+    <string name="dead">Dead</string>
+    <string name="alive">Alive</string>
+    <string name="status">Status</string>
+    <string name="apply">Apply</string>
 </resources>
