@@ -9,13 +9,13 @@ import com.timplifier.core.base.BaseDiffUtil
 import com.timplifier.core.extensions.loadImageWithGlide
 import com.timplifier.main.R
 import com.timplifier.main.databinding.ItemCharacterBinding
-import com.timplifier.main.presentation.models.CharactersUI
+import com.timplifier.main.presentation.models.CharacterUI
 
 class CharactersAdapter(
     private val onItemClick: (id: Int) -> Unit,
     private val fetchFirstSeenIn: (position: Int, episodeUrl: String) -> Unit
 ) :
-    PagingDataAdapter<CharactersUI, CharactersAdapter.CharactersViewHolder>(BaseDiffUtil()) {
+    PagingDataAdapter<CharacterUI, CharactersAdapter.CharactersViewHolder>(BaseDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CharactersViewHolder(
         ItemCharacterBinding.inflate(
@@ -34,7 +34,7 @@ class CharactersAdapter(
 
     inner class CharactersViewHolder(private val binding: ItemCharacterBinding) :
         ViewHolder(binding.root) {
-        fun onBind(character: CharactersUI) = with(binding) {
+        fun onBind(character: CharacterUI) = with(binding) {
             character.apply {
                 imCharacter.loadImageWithGlide(image)
                 tvCharacterName.text = name
@@ -55,6 +55,16 @@ class CharactersAdapter(
             }
         }
 
+        private fun fetchFirstSeenInIfAvailable(firstSeenIn: String, episodeUrl: String) =
+            with(binding) {
+                cpiFirstSeenInEpisode.isVisible = firstSeenIn.isEmpty()
+                tvFirstSeenInEpisode.isVisible = firstSeenIn.isNotEmpty()
+                when (firstSeenIn.isEmpty()) {
+                    true -> fetchFirstSeenIn(absoluteAdapterPosition, episodeUrl)
+                    false -> tvFirstSeenInEpisode.text = firstSeenIn
+                }
+            }
+
         init {
             binding.root.setOnClickListener {
                 getItem(absoluteAdapterPosition)?.let { character ->
@@ -65,15 +75,5 @@ class CharactersAdapter(
                 }
             }
         }
-
-        private fun fetchFirstSeenInIfAvailable(firstSeenIn: String, episodeUrl: String) =
-            with(binding) {
-                cpiFirstSeenInEpisode.isVisible = firstSeenIn.isEmpty()
-                tvFirstSeenInEpisode.isVisible = firstSeenIn.isNotEmpty()
-                when (firstSeenIn.isEmpty()) {
-                    true -> fetchFirstSeenIn(absoluteAdapterPosition, episodeUrl)
-                    false -> tvFirstSeenInEpisode.text = firstSeenIn
-                }
-            }
     }
 }
