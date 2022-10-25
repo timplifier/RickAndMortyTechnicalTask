@@ -29,4 +29,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Rick And Morty Technical Task"
 include(":app", ":common", ":core")
-include(":features:main",":features:main:data",":features:main:domain")
+include(":features:main", ":features:main:data", ":features:main:domain")
