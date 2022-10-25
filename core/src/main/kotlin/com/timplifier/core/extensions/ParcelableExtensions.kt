@@ -1,7 +1,6 @@
 package com.timplifier.core.extensions
 
 import android.os.Parcel
-import com.timplifier.core.extensions.toByte
 
 fun Parcel.write(value: Any?) {
     when (value) {
