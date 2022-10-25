@@ -1,12 +1,16 @@
 package com.timplifier.data.remote.dtos
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.CharacterModel
 
+@Entity
 data class CharacterDto(
     @SerializedName("id")
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     @SerializedName("name")
     val name: String,
@@ -47,3 +51,18 @@ data class CharacterDto(
         created
     )
 }
+
+fun CharacterModel.toData() = CharacterDto(
+    id,
+    name,
+    status,
+    species,
+    type,
+    gender,
+    origin.toData(),
+    location.toData(),
+    image,
+    episode,
+    url,
+    created
+)

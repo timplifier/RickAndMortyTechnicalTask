@@ -12,5 +12,6 @@ data class OriginDto(
     val url: String
 ) : DataMapper<OriginModel> {
     override fun toDomain() = OriginModel(name, url)
-
 }
+
+fun OriginModel.toData() = OriginDto(name, url)

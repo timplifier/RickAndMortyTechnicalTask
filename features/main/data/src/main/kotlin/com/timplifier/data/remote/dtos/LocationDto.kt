@@ -12,5 +12,6 @@ data class LocationDto(
     val url: String
 ) : DataMapper<LocationModel> {
     override fun toDomain() = LocationModel(name, url)
-
 }
+
+fun LocationModel.toData() = LocationDto(name, url)
