@@ -1,4 +1,4 @@
-package com.timplifier.main.presentation.ui.fragments.main.characters.filter
+package com.timplifier.main.presentation.ui.dialogs
 
 import android.widget.RadioButton
 import androidx.navigation.fragment.findNavController
