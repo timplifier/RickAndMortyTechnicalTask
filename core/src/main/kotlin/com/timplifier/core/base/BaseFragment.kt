@@ -2,8 +2,9 @@ package com.timplifier.core.base
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import androidx.annotation.LayoutRes
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -12,7 +13,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.PagingData
 import androidx.viewbinding.ViewBinding
 import com.geektechkb.core.ui.state.UIState
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.timplifier.common.either.Either
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -103,8 +103,8 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
     }
 
     protected fun <T> UIState<T>.assembleViewVisibility(
-        group: ConstraintLayout,
-        loader: CircularProgressIndicator,
+        group: Group,
+        loader: ProgressBar,
         navigationSucceed: Boolean = false,
     ) {
         fun displayLoader(isDisplayed: Boolean) {
