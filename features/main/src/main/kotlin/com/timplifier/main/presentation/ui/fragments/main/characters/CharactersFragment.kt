@@ -3,6 +3,7 @@ package com.timplifier.main.presentation.ui.fragments.main.characters
 import android.net.Uri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.timplifier.core.base.BaseFragment
@@ -15,6 +16,7 @@ import com.timplifier.main.databinding.FragmentCharactersBinding
 import com.timplifier.main.presentation.models.toUI
 import com.timplifier.main.presentation.ui.adapters.CharactersAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class CharactersFragment :
@@ -35,6 +37,15 @@ class CharactersFragment :
 
     override fun launchObservers() {
         subscribeToCharacters()
+//        subscribeToLocalCharacters()
+    }
+
+    private fun subscribeToLocalCharacters() {
+        safeFlowGather {
+            viewModel.localCharactersState.collectLatest {
+                charactersAdapter.submitData(PagingData.from(it))
+            }
+        }
     }
 
     private fun subscribeToCharacters() {
@@ -62,4 +73,11 @@ class CharactersFragment :
 
     private fun getIdFromEpisodeUrl(episodeUrl: String) =
         Uri.parse(episodeUrl).lastPathSegment.toString().toInt()
+
+//    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+//        when (isConnected) {
+//            true -> subscribeToCharacters()
+//            false -> viewModel.getLocalCharacters()
+//        }
+//    }
 }
