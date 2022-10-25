@@ -19,8 +19,8 @@ abstract class BaseDialogFragmentWithoutViewModel<Binding : ViewBinding>(
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        dialog?.setCancelable(false)
-        dialog?.setCanceledOnTouchOutside(false)
+        dialog?.setCancelable(true)
+        dialog?.setCanceledOnTouchOutside(true)
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         return inflater.inflate(layoutId, container, false)
