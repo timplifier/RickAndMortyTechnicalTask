@@ -10,5 +10,6 @@
     <color name="midnight_blue">#505B77</color>
     <color name="darkBlue">#051330</color>
     <color name="vulcan">#3d3e43</color>
-
+    <color name="nobel">#9F9E9E</color>
+    <color name="active_orange">#f19d3a</color>
 </resources>
