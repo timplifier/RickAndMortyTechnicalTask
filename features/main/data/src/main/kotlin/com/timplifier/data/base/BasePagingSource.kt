@@ -21,6 +21,7 @@ abstract class BasePagingSource<ValueDto : DataMapper<Value>, Value : Any>(
                 null -> null
                 else -> Uri.parse(response.info.next).getQueryParameter("page")!!.toInt()
             }
+
             LoadResult.Page(
                 data = response.results.map { it.toDomain() },
                 prevKey = null,
