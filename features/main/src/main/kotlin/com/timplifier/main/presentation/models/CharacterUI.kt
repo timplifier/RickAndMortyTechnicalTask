@@ -3,7 +3,7 @@ package com.timplifier.main.presentation.models
 import com.timplifier.core.base.BaseDiffModel
 import com.timplifier.domain.models.CharacterModel
 
-data class CharactersUI(
+data class CharacterUI(
     override val id: Int,
     val name: String,
     val status: String,
@@ -16,10 +16,10 @@ data class CharactersUI(
     val episode: List<String>,
     val url: String,
     val created: String,
-    var firstSeenInEpisode : String = ""
+    var firstSeenInEpisode: String = ""
 ) : BaseDiffModel<Int>
 
-fun CharacterModel.toUI() = CharactersUI(
+fun CharacterModel.toUI() = CharacterUI(
     id,
     name,
     status,
