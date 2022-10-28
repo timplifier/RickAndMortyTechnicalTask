@@ -15,8 +15,9 @@ fun <T : Any, VH : RecyclerView.ViewHolder> PagingDataAdapter<T, VH>.bindViewsTo
     addLoadStateListener { loadState ->
         recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
         progressBar.isVisible = loadState.refresh is LoadState.Loading
-        viewsToBindToLoadStateNotLoading.forEach {
-            it.isVisible = loadState.refresh is LoadState.NotLoading
-        }
+        if (itemCount == 0)
+            viewsToBindToLoadStateNotLoading.forEach {
+                it.isVisible = loadState.refresh is LoadState.NotLoading
+            }
     }
 }
