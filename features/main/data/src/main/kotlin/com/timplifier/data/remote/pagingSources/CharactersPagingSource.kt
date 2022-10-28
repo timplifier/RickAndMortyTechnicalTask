@@ -8,10 +8,14 @@ import com.timplifier.domain.models.CharacterModel
 
 class CharactersPagingSource(
     private val characterApiService: CharacterApiService,
-    private val characterDao: CharacterDao
+    private val characterDao: CharacterDao,
+    private val name: String?,
+    private val status: String?,
+    private val species: String?,
+    private val gender: String?
 ) :
     BasePagingSource<CharacterDto, CharacterModel>({
-        characterApiService.fetchCharacters(it).also { characters ->
+        characterApiService.fetchCharacters(it, name, status, species, gender).also { characters ->
             characterDao.insertCharacters(*characters.results.toTypedArray())
         }
     })
