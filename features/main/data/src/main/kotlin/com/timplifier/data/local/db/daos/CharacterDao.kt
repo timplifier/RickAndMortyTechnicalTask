@@ -12,8 +12,19 @@ interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacters(vararg characters: CharacterDto)
 
-    @Query("SELECT * FROM characterdto")
-    fun getCharacters(): Flow<List<CharacterDto>>
+    @Query(
+        """ SELECT * FROM characterdto WHERE 
+(:name IS NULL OR name LIKE '%' || :name || '%') AND
+(:status IS NULL OR status = :status) AND
+(:gender IS NULL OR gender = :gender) AND 
+(:species IS NULL OR species = :species)"""
+    )
+    fun getCharacters(
+        name: String?,
+        status: String?,
+        species: String?,
+        gender: String?
+    ): Flow<List<CharacterDto>>
 
     @Query("SELECT * FROM characterdto WHERE id =:id")
     fun getSingleCharacter(id: Int): Flow<CharacterDto>
