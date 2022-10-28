@@ -15,4 +15,10 @@
     <string name="alive">Alive</string>
     <string name="status">Status</string>
     <string name="apply">Apply</string>
+    <string name="none_of_the_characters_matching_this_input_were_found">None of the characters matching this input were found</string>
+    <string name="the_internet_connection_has_been_lost_we_can_show_you_your_saved_local_data">The internet connection has been lost. We can show you your saved local data.</string>
+    <string name="show_saved_data">Show saved data</string>
+    <string name="do_not_show_anymore">Do not show anymore</string>
+    <string name="we_havent_saved_any_data_yet_connect_to_the_internet">Oops, looks like it\'s your first time using the app without an internet so we haven\'t saved anything yet. \n Connect to the internet to allow us to save anything.</string>
+    <string name="reset">Reset</string>
 </resources>
