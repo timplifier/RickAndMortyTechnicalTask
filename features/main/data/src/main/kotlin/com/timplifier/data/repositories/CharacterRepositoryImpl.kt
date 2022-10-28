@@ -14,15 +14,35 @@ class CharacterRepositoryImpl @Inject constructor(
     private val characterDao: CharacterDao
 ) : CharacterRepository {
 
-    override fun fetchCharacters() =
-        makePagingRequest(CharactersPagingSource(characterApiService, characterDao))
+    override fun fetchCharacters(
+        name: String?,
+        status: String?,
+        species: String?,
+        gender: String?
+    ) =
+        makePagingRequest(
+            CharactersPagingSource(
+                characterApiService,
+                characterDao,
+                name,
+                status,
+                species,
+                gender
+            )
+        )
 
     override fun fetchSingleCharacter(id: Int) = makeNetworkRequest {
         characterApiService.fetchSingleCharacter(id).toDomain()
     }
 
-    override fun getLocalCharacters() =
-        characterDao.getCharacters().map { charactersDto -> charactersDto.map { it.toDomain() } }
+    override fun getLocalCharacters(
+        name: String?,
+        status: String?,
+        species: String?,
+        gender: String?
+    ) =
+        characterDao.getCharacters(name, status, species, gender)
+            .map { charactersDto -> charactersDto.map { it.toDomain() } }
 
     override fun getLocalSingleCharacter(id: Int) =
         characterDao.getSingleCharacter(id).map { it.toDomain() }
