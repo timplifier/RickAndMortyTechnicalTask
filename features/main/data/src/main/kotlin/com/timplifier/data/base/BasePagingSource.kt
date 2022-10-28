@@ -19,7 +19,7 @@ abstract class BasePagingSource<ValueDto : DataMapper<Value>, Value : Any>(
             val response = request(position)
             val nextPage = when (response.info.next) {
                 null -> null
-                else -> Uri.parse(response.info.next).getQueryParameter("page")!!.toInt()
+                else -> Uri.parse(response.info.next).getQueryParameter("page")?.toInt()
             }
 
             LoadResult.Page(
