@@ -19,6 +19,10 @@
             android:id="@+id/action_charactersFragment_to_characterDetailFragment"
             app:destination="@id/characterDetailFragment"
             app:popUpTo="@id/charactersFragment" />
+        <action
+            android:id="@+id/action_charactersFragment_to_filterDialogFragment"
+            app:destination="@id/filterDialogFragment"
+            app:popUpTo="@id/charactersFragment" />
     </fragment>
     <fragment
         android:id="@+id/characterDetailFragment"
@@ -34,6 +38,11 @@
         android:id="@+id/filterDialogFragment"
         android:name="com.timplifier.main.presentation.ui.dialogs.FilterDialogFragment"
         android:label="FilterDialogFragment">
+        <argument
+            android:name="currentFilter"
+            android:defaultValue="@null"
+            app:argType="com.timplifier.main.presentation.models.CharacterFilter"
+            app:nullable="true" />
         <action
             android:id="@+id/action_filterDialogFragment_to_charactersFragment"
             app:destination="@id/charactersFragment" />
