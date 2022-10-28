@@ -14,5 +14,5 @@ interface EpisodeDao {
     fun insertEpisodes(vararg episodes: EpisodeDto)
 
     @Query("SELECT * FROM episodedto WHERE url =:url")
-    fun getLocalEpisodes(url: String): Flow<List<EpisodeDto>>
+    fun getSingleEpisode(url: String): Flow<EpisodeDto>
 }
