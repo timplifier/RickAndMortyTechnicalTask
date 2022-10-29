@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -37,7 +38,6 @@ class CharactersFragment :
     private val isConnectedToInternet: InternetConnectivityManager by lazy {
         InternetConnectivityManager(requireActivity())
     }
-    private var isConnected = false
 
     @Inject
     lateinit var internetConnectionPreferencesManager: InternetConnectionPreferencesManager
@@ -48,13 +48,15 @@ class CharactersFragment :
     }
 
     private fun constructRecycler() = with(binding) {
-        rvCharacters.layoutManager = LinearLayoutManager(requireContext())
-        rvCharacters.adapter = charactersAdapter.withLoadStateFooter(BaseLoadStateAdapter())
-        charactersAdapter.bindViewsToPagingLoadStates(
-            rvCharacters,
-            cpiCharacters,
-            tvNoneOfTheCharactersMatchingThisInputWereFound
-        )
+        rvCharacters.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = charactersAdapter.withLoadStateFooter(BaseLoadStateAdapter())
+            itemAnimator = null
+            charactersAdapter.bindViewsToPagingLoadStates(
+                this,
+                cpiCharacters,
+            )
+        }
     }
 
     private fun establishSearch() {
@@ -62,7 +64,6 @@ class CharactersFragment :
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
                     viewModel.modifySearchQuery(it)
-                    subscribeToCharacters()
                 }
                 return false
             }
@@ -70,7 +71,6 @@ class CharactersFragment :
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.modifySearchQuery(query?.trim())
                 binding.svCharacters.clearFocus()
-                subscribeToCharacters()
                 return false
             }
         })
@@ -91,20 +91,18 @@ class CharactersFragment :
         searchClearButton.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
     }
 
-    private fun handleFilterVisibility() {
-        binding.svCharacters.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            binding.imFilter.isVisible = !hasFocus
+    private fun handleFilterVisibility() = with(binding) {
+        svCharacters.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            imFilter.isVisible = !hasFocus
         }
-        binding.svCharacters.setOnCloseListener {
-            binding.rvCharacters.scrollToPosition(0)
+        svCharacters.setOnCloseListener {
+            rvCharacters.scrollToPosition(0)
             args.filter?.status = null
             args.filter?.species = null
             args.filter?.gender = null
             viewModel.modifySearchQuery("")
-            when (isConnected) {
-                true -> viewModel.fetchCharacters()
-                false -> extractDataFromRoom()
-            }
+            svCharacters.clearFocus()
+            subscribeToFetchedAndLocalCharacters()
             false
         }
     }
@@ -144,60 +142,51 @@ class CharactersFragment :
 
     override fun launchObservers() {
         subscribeToInternetConnectionStatus()
-        subscribeToFetchedAndLocalCharacters()
         subscribeToSearchQuery()
     }
 
-    private fun subscribeToInternetConnectionStatus() {
-        isConnectedToInternet.observe(viewLifecycleOwner) {
-            isConnected = it
-        }
+    private fun subscribeToInternetConnectionStatus() = with(binding) {
+        observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
+            actionWhenDisconnected = {
+                appbar.isGone =
+                    internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection
+                rvCharacters.isGone =
+                    internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection
+                iNoInternet.root.isVisible =
+                    internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection
+                binding.cpiCharacters.isVisible = !iNoInternet.root.isVisible
+                if (iNoInternet.root.isGone) {
+                    extractDataFromRoom()
+                }
+            },
+            actionWhenConnected = {
+                appbar.visible()
+                rvCharacters.visible()
+                iNoInternet.root.gone()
+                subscribeToFetchedAndLocalCharacters()
+            })
     }
 
     private fun subscribeToFetchedAndLocalCharacters() {
-        when (isConnected) {
-            true -> {
-//                viewModel.fetchCharacters()
-                subscribeToCharacters()
-            }
-            false -> {
-                viewModel.getLocalCharacters()
-                subscribeToLocalCharacters()
+        isConnectedToInternet.observe(viewLifecycleOwner) {
+            when (it) {
+                true -> {
+                    subscribeToCharacters()
+                }
+                false -> {
+                    extractDataFromRoom()
+                }
             }
         }
-//        args.filter?.let {
-//            it.apply {
-//                when (isConnected) {
-//                    true -> {
-//                        viewModel.fetchCharacters(status, species, gender)
-//                        subscribeToCharacters()
-//                    }
-//                    false -> {
-//                        viewModel.getLocalCharacters(status, species, gender)
-//                        subscribeToLocalCharacters()
-//                    }
-//                }
-//            }
-//        } ?: when (isConnected) {
-//            true -> {
-//                viewModel.fetchCharacters()
-//                subscribeToCharacters()
-//            }
-//            false -> {
-//                viewModel.getLocalCharacters()
-//                subscribeToLocalCharacters()
-//            }
-//        }
     }
 
     private fun subscribeToSearchQuery() {
         safeFlowGather {
             viewModel.searchQueryState.collectLatest {
                 it?.let {
-                    when (isConnected) {
-                        true -> viewModel.fetchCharacters()
-                        false -> viewModel.getLocalCharacters()
-                    }
+                    subscribeToFetchedAndLocalCharacters()
+                    binding.tvNoneOfTheCharactersMatchingThisInputWereFound.isVisible =
+                        charactersAdapter.itemCount == 0
                 }
             }
         }
@@ -205,11 +194,9 @@ class CharactersFragment :
 
     private fun subscribeToCharacters() {
         viewModel.fetchCharacters(
-            args.filter?.status,
-            args.filter?.species,
-            args.filter?.gender
-        ).spectatePaging {
-            charactersAdapter.submitData(it)
+            args.filter?.status, args.filter?.species, args.filter?.gender
+        ).spectatePaging { pagingData ->
+            charactersAdapter.submitData(pagingData)
         }
     }
 
@@ -221,7 +208,6 @@ class CharactersFragment :
         }
     }
 
-
     private fun onItemClick(id: Int) {
         findNavController().directionsSafeNavigation(
             CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailFragment(
@@ -231,9 +217,9 @@ class CharactersFragment :
     }
 
     private fun fetchFirstSeenIn(position: Int, episodeUrl: String) {
-        when (isConnected) {
-            true ->
-                try {
+        observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
+            actionWhenConnected = {
+                tryToDoSomethingAndCatchNullPointerException {
                     viewModel.fetchSingleEpisode(getIdFromEpisodeUrl(episodeUrl))
                         .safeFlowGather(actionIfEitherIsRight = {
                             charactersAdapter.renderCharacterFirstSeenIn(
@@ -243,26 +229,31 @@ class CharactersFragment :
                         }, actionIfEitherIsLeft = {
                             loge(msg = it)
                         })
-
-                } catch (e: IllegalStateException) {
-
-                } catch (e: IndexOutOfBoundsException) {
-
-                } catch (e: java.lang.NullPointerException) {
                 }
-
-            false -> try {
+            },
+            actionWhenDisconnected = {
                 safeFlowGather {
-                    viewModel.getSingleEpisode(episodeUrl).collectLatest {
-                        charactersAdapter.renderCharacterFirstSeenIn(position, it.toUI().name)
+                    tryToDoSomethingAndCatchNullPointerException {
+                        viewModel.getSingleEpisode(episodeUrl).collectLatest {
+                            it.toUI().name.let { name ->
+                                charactersAdapter.renderCharacterFirstSeenIn(position, name)
+                            }
+                        }
                     }
                 }
+            })
+    }
 
-            } catch (e: IllegalStateException) {
-
-            } catch (e: IndexOutOfBoundsException) {
-
-            } catch (e: java.lang.NullPointerException) {
+    private fun tryToDoSomethingAndCatchNullPointerException(action: suspend () -> Unit) {
+        safeFlowGather {
+            try {
+                action()
+            } catch (nullPointer: NullPointerException) {
+                loge(msg = nullPointer.message.toString())
+            } catch (indexOutOfBounds: IndexOutOfBoundsException) {
+                loge(msg = indexOutOfBounds.message.toString())
+            } catch (illegalState: IllegalStateException) {
+                loge(msg = illegalState.message.toString())
             }
         }
     }
@@ -272,7 +263,21 @@ class CharactersFragment :
 
     private fun extractDataFromRoom() {
         viewModel.getLocalCharacters(args.filter?.status, args.filter?.species, args.filter?.gender)
+        subscribeToLocalCharacters()
         binding.iNoInternet.root.gone()
         binding.appbar.visible()
+        binding.rvCharacters.visible()
+    }
+
+    private fun observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
+        actionWhenConnected: () -> Unit,
+        actionWhenDisconnected: () -> Unit
+    ) {
+        isConnectedToInternet.observe(viewLifecycleOwner) {
+            when (it) {
+                true -> actionWhenConnected()
+                false -> actionWhenDisconnected()
+            }
+        }
     }
 }
