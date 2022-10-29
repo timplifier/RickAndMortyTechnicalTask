@@ -1,6 +1,5 @@
 package com.timplifier.core.extensions
 
-import android.view.View
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
