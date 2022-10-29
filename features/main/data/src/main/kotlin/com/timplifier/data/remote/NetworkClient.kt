@@ -14,6 +14,6 @@ class NetworkClient @Inject constructor() {
     fun generateCharacterApiService(): CharacterApiService = retrofit.createAnApi()
 
     fun generateEpisodeApiService(): EpisodeApiService = retrofit.createAnApi()
-}
 
-private inline fun <reified T : Any> Retrofit.createAnApi(): T = create(T::class.java)
+    private inline fun <reified T : Any> Retrofit.createAnApi(): T = create(T::class.java)
+}
