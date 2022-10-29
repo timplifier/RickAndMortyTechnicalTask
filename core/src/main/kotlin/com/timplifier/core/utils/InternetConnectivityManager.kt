@@ -33,6 +33,7 @@ class InternetConnectivityManager(context: Context) : LiveData<Boolean>() {
         if (network == null) {
             postValue(false)
         }
+
         connectivityManager.registerNetworkCallback(NetworkRequest.Builder().apply {
             addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
