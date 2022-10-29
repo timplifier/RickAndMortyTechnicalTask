@@ -1,4 +1,4 @@
-package com.geektechkb.core.ui.state
+package com.timplifier.core.ui.state
 
 sealed class UIState<T> {
     class Idle<T> : UIState<T>()
