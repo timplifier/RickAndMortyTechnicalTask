@@ -111,6 +111,10 @@ class FilterDialogFragment :
                             gender = previousFilter.gender
                         }
                     }
+                } ?: also {
+                    binding.rgStatus.clearCheck()
+                    binding.rgSpecies.clearCheck()
+                    binding.rgGender.clearCheck()
                 }
                 radioButton.setOnCheckedChangeListenerAndRetrieveItsText { radioButtonText ->
                     when (fieldToChange) {
