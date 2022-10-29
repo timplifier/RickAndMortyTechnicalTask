@@ -70,6 +70,7 @@
         android:id="@+id/tv_you_dont_have_any_data_saved"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/we_havent_saved_any_data_yet_connect_to_the_internet"
         android:textColor="@color/white"
