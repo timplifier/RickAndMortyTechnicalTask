@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.PagingData
 import androidx.viewbinding.ViewBinding
-import com.geektechkb.core.ui.state.UIState
+import com.timplifier.core.ui.state.UIState
 import com.timplifier.common.either.Either
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
