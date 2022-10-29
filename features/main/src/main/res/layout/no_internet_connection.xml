@@ -22,16 +22,9 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_show_local_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
+        style="@style/BaseNoInternetLayoutTextViewWithActionStyle"
         android:text="@string/show_saved_data"
-        android:textColor="@color/active_orange"
-        android:textSize="24sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tv_or" />
-
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_or"
@@ -47,13 +40,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_do_not_show_anymore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
+        style="@style/BaseNoInternetLayoutTextViewWithActionStyle"
         android:text="@string/do_not_show_anymore"
-        android:textColor="@color/active_orange"
-        android:textSize="24sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
