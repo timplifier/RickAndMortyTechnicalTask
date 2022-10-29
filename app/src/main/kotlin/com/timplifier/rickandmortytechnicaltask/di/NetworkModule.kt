@@ -12,12 +12,15 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Singleton
+    private val networkClient = NetworkClient()
+
+    @Singleton
     @Provides
-    fun generateCharactersApiService(networkClient: NetworkClient) =
+    fun generateCharactersApiService() =
         networkClient.generateCharacterApiService()
 
     @Singleton
     @Provides
-    fun generateEpisodeApiService(networkClient: NetworkClient) =
+    fun generateEpisodeApiService() =
         networkClient.generateEpisodeApiService()
 }
