@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":features:main:domain"))
+    api(project(":features:main:domain"))
 
     // Retrofit
     implementation(libs.bundles.retrofit)
@@ -58,6 +58,6 @@ dependencies {
     api(libs.paging.paging)
 
     // Room
-    implementation(libs.bundles.room)
+    api(libs.bundles.room)
     kapt(libs.room.compiler)
 }

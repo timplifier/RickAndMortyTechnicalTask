@@ -4,8 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
     app:startDestination="@id/charactersFragment">
+
     <fragment
         android:id="@+id/charactersFragment"
-        android:name="com.timplifier.main.presentation.ui.fragments.characters.CharactersFragment"
-        android:label="CharactersFragment" />
+        android:name="com.timplifier.main.presentation.ui.fragments.main.characters.CharactersFragment"
+        android:label="CharactersFragment"
+        tools:layout="@layout/fragment_characters">
+        <argument
+            android:name="filter"
+            android:defaultValue="@null"
+            app:argType="com.timplifier.main.presentation.models.CharacterFilter"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_charactersFragment_to_characterDetailFragment"
+            app:destination="@id/characterDetailFragment"
+            app:popUpTo="@id/charactersFragment" />
+        <action
+            android:id="@+id/action_charactersFragment_to_filterDialogFragment"
+            app:destination="@id/filterDialogFragment"
+            app:popUpTo="@id/charactersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/characterDetailFragment"
+        android:name="com.timplifier.main.presentation.ui.fragments.main.characters.detail.CharacterDetailFragment"
+        android:label="CharacterDetailFragment"
+        tools:layout="@layout/fragment_character_detail">
+        <argument
+            android:name="characterId"
+            app:argType="integer" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/filterDialogFragment"
+        android:name="com.timplifier.main.presentation.ui.dialogs.FilterDialogFragment"
+        android:label="FilterDialogFragment">
+        <argument
+            android:name="currentFilter"
+            android:defaultValue="@null"
+            app:argType="com.timplifier.main.presentation.models.CharacterFilter"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_filterDialogFragment_to_charactersFragment"
+            app:destination="@id/charactersFragment" />
+    </dialog>
 </navigation>

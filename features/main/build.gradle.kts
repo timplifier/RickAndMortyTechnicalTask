@@ -49,8 +49,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":features:main:data"))
-    implementation(project(":features:main:domain"))
+    api(project(":features:main:data"))
 
     // Glide
     implementation(libs.glide.glide)

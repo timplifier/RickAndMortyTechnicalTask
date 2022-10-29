@@ -28,21 +28,14 @@ abstract class BaseDialogFragmentWithoutViewModel<Binding : ViewBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         assembleViews()
         initialize()
         setupListeners()
     }
 
-    protected open fun initialize() {
+    protected open fun initialize() {}
 
-    }
+    protected open fun assembleViews() {}
 
-    protected open fun assembleViews() {
-
-    }
-
-    protected open fun setupListeners() {
-    }
+    protected open fun setupListeners() {}
 }

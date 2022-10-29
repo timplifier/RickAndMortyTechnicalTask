@@ -3,7 +3,6 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-
         maven { url = uri("https://jitpack.io") }
     }
 }
@@ -29,4 +28,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Rick And Morty Technical Task"
 include(":app", ":common", ":core")
-include(":features:main",":features:main:data",":features:main:domain")
+include(":features:main", ":features:main:data", ":features:main:domain")

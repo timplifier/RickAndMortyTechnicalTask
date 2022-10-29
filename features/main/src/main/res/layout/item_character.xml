@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="10dp"
+    app:cardBackgroundColor="@color/vulcan"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/im_character"
+            android:layout_width="168dp"
+            android:layout_height="0dp"
+            android:paddingEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_character_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/im_character"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Dolbaeb" />
+
+        <ImageView
+            android:id="@+id/im_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toEndOf="@id/im_character"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_name"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_character_unknown_status" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_character_status_and_species"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/im_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_name"
+            tools:text="Alive - Debil" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_last_known_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/last_known_location"
+            android:textColor="@color/nobel"
+            app:layout_constraintStart_toEndOf="@id/im_character"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_status_and_species" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_last_known_location_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/im_character"
+            app:layout_constraintTop_toBottomOf="@id/tv_last_known_location"
+            tools:text="Clowntown" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_first_seen_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/first_seen_in"
+            android:textColor="@color/nobel"
+            app:layout_constraintStart_toEndOf="@id/im_character"
+            app:layout_constraintTop_toBottomOf="@id/tv_last_known_location_name" />
+
+        <ProgressBar
+            android:id="@+id/cpi_first_seen_in_episode"
+            style="@style/BaseProgressBar"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/im_character"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_seen_in"
+            tools:visibility="visible" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_first_seen_in_episode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/im_character"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_seen_in"
+            tools:text="Fuck" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

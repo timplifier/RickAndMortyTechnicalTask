@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="20dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="205dp"
+        android:minWidth="320dp"
+        app:cardBackgroundColor="@color/darkBlue"
+        app:cardCornerRadius="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_status"
+                style="@style/BaseFilterDialogFilterTitleStyle"
+                android:layout_marginEnd="40dp"
+                android:text="@string/status"
+                app:layout_constraintEnd_toStartOf="@id/tv_species"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/rg_status"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_species"
+                app:layout_constraintStart_toStartOf="@id/tv_status"
+                app:layout_constraintTop_toBottomOf="@id/tv_status">
+
+                <RadioButton
+                    android:id="@+id/rb_alive"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/alive" />
+
+                <RadioButton
+                    android:id="@+id/rb_dead"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/dead" />
+
+                <RadioButton
+                    android:id="@+id/rb_unknown"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/unknown" />
+            </RadioGroup>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_species"
+                style="@style/BaseFilterDialogFilterTitleStyle"
+                android:text="@string/species"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/rg_species"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_gender"
+                app:layout_constraintStart_toStartOf="@id/tv_species"
+                app:layout_constraintTop_toBottomOf="@id/tv_species">
+
+                <RadioButton
+                    android:id="@+id/rb_human"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/human" />
+
+                <RadioButton
+                    android:id="@+id/rb_humanoid"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/humanoid" />
+
+                <RadioButton
+                    android:id="@+id/rb_alien"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/alien" />
+            </RadioGroup>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_gender"
+                style="@style/BaseFilterDialogFilterTitleStyle"
+                android:text="@string/gender"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_species"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/rg_gender"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_gender"
+                app:layout_constraintTop_toBottomOf="@id/tv_gender">
+
+                <RadioButton
+                    android:id="@+id/rb_male"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/male" />
+
+                <RadioButton
+                    android:id="@+id/rb_female"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/female" />
+
+                <RadioButton
+                    android:id="@+id/rb_unknown_gender"
+                    style="@style/BaseFilterDialogRadioButtonStyle"
+                    android:text="@string/unknown" />
+            </RadioGroup>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_reset_filters"
+                style="@style/BaseFilterDialogTextViewWithActionStyle"
+                android:layout_marginEnd="30dp"
+                android:text="@string/reset"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_apply_filters" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_apply_filters"
+                style="@style/BaseFilterDialogTextViewWithActionStyle"
+                android:layout_marginStart="30dp"
+                android:text="@string/apply"
+                android:textColor="@color/active_orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_species" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>
