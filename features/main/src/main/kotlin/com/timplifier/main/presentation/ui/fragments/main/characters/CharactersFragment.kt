@@ -51,10 +51,10 @@ class CharactersFragment :
         rvCharacters.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = charactersAdapter.withLoadStateFooter(BaseLoadStateAdapter())
-            itemAnimator = null
             charactersAdapter.bindViewsToPagingLoadStates(
                 this,
                 cpiCharacters,
+                tvNoneOfTheCharactersMatchingThisInputWereFound
             )
         }
     }
@@ -96,13 +96,14 @@ class CharactersFragment :
             imFilter.isVisible = !hasFocus
         }
         svCharacters.setOnCloseListener {
-            rvCharacters.scrollToPosition(0)
             args.filter?.status = null
             args.filter?.species = null
             args.filter?.gender = null
             viewModel.modifySearchQuery("")
+            rvCharacters.scrollToPosition(0)
+            svCharacters.setQuery("", true)
             svCharacters.clearFocus()
-            subscribeToFetchedAndLocalCharacters()
+            svCharacters.onActionViewCollapsed()
             false
         }
     }
@@ -148,47 +149,62 @@ class CharactersFragment :
     private fun subscribeToInternetConnectionStatus() = with(binding) {
         observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
             actionWhenDisconnected = {
-                appbar.isGone =
-                    internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection
-                rvCharacters.isGone =
-                    internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection
                 iNoInternet.root.isVisible =
                     internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection
-                binding.cpiCharacters.isVisible = !iNoInternet.root.isVisible
-                if (iNoInternet.root.isGone) {
+                if (svCharacters.hasFocus())
+                    svCharacters.clearFocus()
+                svCharacters.setQuery("", true)
+                args.filter?.let {
+                    iNoInternet.root.invisible()
+                    viewModel.getLocalCharacters(
+                        args.filter?.status,
+                        args.filter?.species,
+                        args.filter?.gender
+                    )
+                    subscribeToLocalCharacters()
+                }
+                if (iNoInternet.root.isVisible) {
+                    appbar.isGone = true
+                    rvCharacters.isGone = true
+                }
+                if (!internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection) {
                     extractDataFromRoom()
                 }
             },
             actionWhenConnected = {
-                appbar.visible()
-                rvCharacters.visible()
-                iNoInternet.root.gone()
-                subscribeToFetchedAndLocalCharacters()
+                if (iNoInternet.root.isVisible) {
+                    iNoInternet.root.gone()
+                    appbar.visible()
+                    rvCharacters.visible()
+                }
+                subscribeToCharacters()
             })
     }
 
-    private fun subscribeToFetchedAndLocalCharacters() {
-        isConnectedToInternet.observe(viewLifecycleOwner) {
-            when (it) {
-                true -> {
-                    subscribeToCharacters()
-                }
-                false -> {
-                    extractDataFromRoom()
-                }
-            }
-        }
+    private fun subscribeToFetchedOrLocalCharacters() {
+        observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
+            actionWhenConnected = {
+                subscribeToCharacters()
+            },
+            actionWhenDisconnected = {
+                viewModel.getLocalCharacters(
+                    args.filter?.status,
+                    args.filter?.species,
+                    args.filter?.gender
+                )
+                subscribeToLocalCharacters()
+            })
     }
 
     private fun subscribeToSearchQuery() {
         safeFlowGather {
             viewModel.searchQueryState.collectLatest {
                 it?.let {
-                    subscribeToFetchedAndLocalCharacters()
-                    binding.tvNoneOfTheCharactersMatchingThisInputWereFound.isVisible =
-                        charactersAdapter.itemCount == 0
-                }
+                    subscribeToFetchedOrLocalCharacters()
+                } ?: subscribeToFetchedOrLocalCharacters()
             }
+            binding.tvNoneOfTheCharactersMatchingThisInputWereFound.isVisible =
+                charactersAdapter.itemCount == 0
         }
     }
 
@@ -261,12 +277,18 @@ class CharactersFragment :
     private fun getIdFromEpisodeUrl(episodeUrl: String) =
         Uri.parse(episodeUrl).lastPathSegment.toString().toInt()
 
-    private fun extractDataFromRoom() {
-        viewModel.getLocalCharacters(args.filter?.status, args.filter?.species, args.filter?.gender)
-        subscribeToLocalCharacters()
-        binding.iNoInternet.root.gone()
-        binding.appbar.visible()
-        binding.rvCharacters.visible()
+    private fun extractDataFromRoom() = with(binding) {
+        if (iNoInternet.root.isVisible) {
+            viewModel.getLocalCharacters(
+                args.filter?.status,
+                args.filter?.species,
+                args.filter?.gender
+            )
+            subscribeToLocalCharacters()
+            iNoInternet.root.gone()
+            appbar.visible()
+            rvCharacters.visible()
+        }
     }
 
     private fun observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
