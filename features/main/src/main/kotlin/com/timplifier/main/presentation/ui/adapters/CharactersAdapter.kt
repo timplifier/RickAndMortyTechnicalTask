@@ -28,8 +28,11 @@ class CharactersAdapter(
     }
 
     fun renderCharacterFirstSeenIn(position: Int, firstSeenIn: String) {
-        getItem(position)?.firstSeenInEpisode = firstSeenIn
-        notifyItemChanged(position)
+        try {
+            getItem(position)?.firstSeenInEpisode = firstSeenIn
+            notifyItemChanged(position)
+        } catch (e: IndexOutOfBoundsException) {
+        }
     }
 
     inner class CharactersViewHolder(private val binding: ItemCharacterBinding) :
