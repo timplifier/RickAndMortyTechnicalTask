@@ -1,5 +1,6 @@
 package com.timplifier.main.presentation.ui.fragments.main.characters.detail
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -29,11 +30,13 @@ class CharacterDetailFragment :
                 when (it) {
                     true -> {
                         fetchSingleCharacter(args.characterId)
-                        characterState.spectateUiState(success = {
-                            imCharacter.loadImageWithGlide(it.image)
-                            tvCharacterName.text = it.name
-                        }, gatherIfSucceed = {
-                            it.assembleViewVisibility(gCharacterInfo, cpiCharacterDetail)
+                        characterState.spectateUiState(success = { character ->
+                            character.apply {
+                                imCharacter.loadImageWithGlide(image)
+                                tvCharacterName.text = name
+                                cpiCharacterDetail.isVisible =
+                                    image.isEmpty() && name.isEmpty()
+                            }
                         })
                     }
                     else -> {
@@ -41,8 +44,12 @@ class CharacterDetailFragment :
                         safeFlowGather {
                             localCharacterState.collectLatest {
                                 it?.let { character ->
-                                    imCharacter.loadImageWithGlide(character.image)
-                                    tvCharacterName.text = character.name
+                                    character.apply {
+                                        imCharacter.loadImageWithGlide(image)
+                                        tvCharacterName.text = name
+                                        cpiCharacterDetail.isVisible =
+                                            image.isEmpty() && name.isEmpty()
+                                    }
                                 }
                             }
                         }
