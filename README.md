@@ -21,18 +21,18 @@ Advanced Kotlin Coroutines + Flow Usage</p>**
     - Дизайн брать с Kitsu приложения**
 
 Требования по используемым технологиям: 
-• Kotlin + Kotlin code style 
-• Single Activity + Clean Architecture + MVVM
-• Koin 
-• Modularization
-• Retrofit + OkHTTP
-• Paging 3 
-• Kotlin DSL (BuildSrc)
-• Powerful .gitignore
-• Kotlin coroutines + Flow
-• ViewPager2
-• Navigation Component
-• Material Design ( Material Components only )
+ - Kotlin + Kotlin code style 
+ - Single Activity + Clean Architecture + MVVM
+ - Koin 
+ - Modularization
+ - Retrofit + OkHTTP
+ - Paging 3 
+ - Kotlin DSL (BuildSrc)
+ - Powerful .gitignore
+ - Kotlin coroutines + Flow
+ - ViewPager2
+ - Navigation Component
+ - Material Design ( Material Components only )
 **![](https://lh4.googleusercontent.com/hS2EL300U9ZcL83YJmexY_p-aU42N6Ai5IP63hvlJLDrrbVAeyqFU5nAksR4GyPt94YHSaB9fHaKESlOyWcICZ9gU7nfj45zgL_lo0TeWCibWbwibVjq0QYToBSaVhxLdPsy7MUNcsU4YB_xHYPEvRk)
 Говоря Powerful .gitignore я подразумеваю используя следующее для root .gitignore. Значит, при пуше проекта, папки .idea не будет
 ```
