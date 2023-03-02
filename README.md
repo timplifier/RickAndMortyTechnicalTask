@@ -5,20 +5,17 @@
 После того как вы приступили к тестовому заданию, пишите вашему куратору время начала выполнения таска. Все проблемы и вопросы пишите ему.
 
 **<p align="center">Test Task #1
-Multi-module project introduction
-Kotlin DSL ( BuildSrc ) 
-Powerful .gitignore
-Advanced Mapping
-Advanced Kotlin Coroutines + Flow Usage</p>**
+</p>**
 
 Все тестовые задания будут выполняться в одном проекте, использующий Kitsu API как бэкэнд. По ходу выполнения тестовых заданий, приложение будет наполняться новым функционалом. По окончанию всех тестовых заданий, вы будете готовы покорять Tez Sat.
 
-** Необходимо создать приложение, реализовав следующее : 
-    - Экран с Tab Layout, состоящий из 3 табов : 
-                    -  RecyclerView с Аниме
-                    - RecyclerView с Мангой
-                    - RecyclerView с Пользователями                                                                                                                                                      
-    - Дизайн брать с Kitsu приложения**
+ Необходимо создать приложение, реализовав следующее : 
+ 
+     - Экран с Tab Layout, состоящий из 3 табов : 
+                     - RecyclerView с Аниме
+                     - RecyclerView с Мангой
+                     - RecyclerView с Пользователями                                                                                                                                                      
+     - Дизайн брать с Kitsu приложения
 
 Требования по используемым технологиям: 
  - Kotlin + Kotlin code style 
@@ -33,7 +30,9 @@ Advanced Kotlin Coroutines + Flow Usage</p>**
  - ViewPager2
  - Navigation Component
  - Material Design ( Material Components only )
+
 **![](https://lh4.googleusercontent.com/hS2EL300U9ZcL83YJmexY_p-aU42N6Ai5IP63hvlJLDrrbVAeyqFU5nAksR4GyPt94YHSaB9fHaKESlOyWcICZ9gU7nfj45zgL_lo0TeWCibWbwibVjq0QYToBSaVhxLdPsy7MUNcsU4YB_xHYPEvRk)
+
 Говоря Powerful .gitignore я подразумеваю используя следующее для root .gitignore. Значит, при пуше проекта, папки .idea не будет
 ```
 ../.gitignore
