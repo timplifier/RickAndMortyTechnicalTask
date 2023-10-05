@@ -10,9 +10,6 @@ plugins {
 
     // Safe Args
     id(libs.plugins.navigation.safeArgs.get().pluginId)
-
-    // Hilt
-    id(libs.plugins.hilt.android.get().pluginId)
 }
 
 
@@ -40,7 +37,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = options.versions.kotlinJvmTargetOptions.get()
+        jvmTarget = jvmOptions.versions.kotlinJvmTargetOptions.get()
     }
     buildFeatures {
         viewBinding = true
@@ -48,13 +45,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    api(project(":features:main:data"))
+    api(project(":core"))
 
     // Glide
     implementation(libs.glide.glide)
 
-    // Hilt
-    implementation(libs.bundles.hilt)
-    kapt(libs.hilt.compiler)
+    // Dagger
+    kapt(libs.dagger.compiler)
 }

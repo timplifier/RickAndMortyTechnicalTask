@@ -37,7 +37,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = options.versions.kotlinJvmTargetOptions.get()
+        jvmTarget = jvmOptions.versions.kotlinJvmTargetOptions.get()
     }
     buildFeatures {
         viewBinding = true
@@ -47,6 +47,7 @@ android {
 dependencies {
 
     api(project(":common"))
+    api(project(":features:main:data"))
 
     // UI Components
     api(libs.bundles.uiComponents)
@@ -68,4 +69,8 @@ dependencies {
 
     // Paging 3
     implementation(libs.paging.paging)
+
+    // Dagger
+    api(libs.dagger.dagger)
+    kapt(libs.dagger.compiler)
 }

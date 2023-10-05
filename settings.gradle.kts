@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         create("config") {
             from(files("gradle/config.versions.toml"))
         }
-        create("options") {
+        create("jvmOptions") {
             from(files("gradle/options.versions.toml"))
         }
     }

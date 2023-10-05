@@ -8,14 +8,12 @@ import com.timplifier.domain.useCases.GetCharactersUseCase
 import com.timplifier.domain.useCases.GetSingleEpisodeUseCase
 import com.timplifier.main.presentation.models.CharacterUI
 import com.timplifier.main.presentation.models.toUI
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class CharactersViewModel @Inject constructor(
     private val fetchCharactersUseCase: FetchCharactersUseCase,
     private val fetchSingleEpisodeUseCase: FetchSingleEpisodeUseCase,

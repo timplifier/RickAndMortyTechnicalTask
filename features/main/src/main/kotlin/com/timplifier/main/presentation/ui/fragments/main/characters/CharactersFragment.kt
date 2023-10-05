@@ -1,5 +1,6 @@
 package com.timplifier.main.presentation.ui.fragments.main.characters
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
@@ -17,30 +19,47 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.timplifier.core.base.BaseFragment
 import com.timplifier.core.base.BaseLoadStateAdapter
-import com.timplifier.core.extensions.*
+import com.timplifier.core.extensions.bindViewsToPagingLoadStates
+import com.timplifier.core.extensions.directionsSafeNavigation
+import com.timplifier.core.extensions.gone
+import com.timplifier.core.extensions.invisible
+import com.timplifier.core.extensions.loge
+import com.timplifier.core.extensions.visible
 import com.timplifier.core.utils.InternetConnectivityManager
+import com.timplifier.core.utils.ViewModelFactory
 import com.timplifier.data.local.preferences.InternetConnectionPreferencesManager
 import com.timplifier.main.R
 import com.timplifier.main.databinding.FragmentCharactersBinding
+import com.timplifier.main.presentation.di.components.DaggerMainComponent
 import com.timplifier.main.presentation.models.toUI
 import com.timplifier.main.presentation.ui.adapters.CharactersAdapter
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class CharactersFragment :
     BaseFragment<FragmentCharactersBinding, CharactersViewModel>(R.layout.fragment_characters) {
     override val binding by viewBinding(FragmentCharactersBinding::bind)
-    override val viewModel by viewModels<CharactersViewModel>()
+    override val viewModel by viewModels<CharactersViewModel> {
+        ViewModelProvider(this, viewModelFactory)[CharactersViewModel::class.java]
+        viewModelFactory
+    }
     private val args by navArgs<CharactersFragmentArgs>()
     private val charactersAdapter = CharactersAdapter(this::onItemClick, this::fetchFirstSeenIn)
+
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelFactory
+
     private val isConnectedToInternet: InternetConnectivityManager by lazy {
         InternetConnectivityManager(requireActivity())
     }
 
     @Inject
     lateinit var internetConnectionPreferencesManager: InternetConnectionPreferencesManager
+
+    override fun onAttach(context: Context) {
+        DaggerMainComponent.builder().context(context).build().inject(this)
+        super.onAttach(context)
+    }
 
     override fun initialize() {
         constructRecycler()
@@ -130,7 +149,8 @@ class CharactersFragment :
 
     private fun doNotShowNoInternetConnectionLayoutAnymore() = with(binding) {
         iNoInternet.tvDoNotShowAnymore.setOnClickListener {
-            internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection = false
+            internetConnectionPreferencesManager.shouldAwareUserAboutLostInternetConnection =
+                false
             extractDataFromRoom()
         }
     }

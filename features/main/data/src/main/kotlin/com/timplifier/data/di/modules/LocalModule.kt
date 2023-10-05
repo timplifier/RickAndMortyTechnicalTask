@@ -1,17 +1,13 @@
-package com.timplifier.rickandmortytechnicaltask.di
+package com.timplifier.data.di.modules
 
 import android.content.Context
 import com.timplifier.data.local.db.RickAndMortyDatabase
 import com.timplifier.data.local.db.RoomManager
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
 object LocalModule {
 
     @Singleton
@@ -19,7 +15,7 @@ object LocalModule {
 
     @Singleton
     @Provides
-    fun generateRoomDatabase(@ApplicationContext context: Context) =
+    fun generateRoomDatabase(context: Context) =
         roomManager.generateRoomDatabase(context)
 
     @Singleton

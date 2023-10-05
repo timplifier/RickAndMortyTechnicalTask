@@ -6,7 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.timplifier.data.remote.dtos.LocationDto
 import com.timplifier.data.remote.dtos.OriginDto
 
-object Converters {
+class Converters {
 
     private inline fun <reified T> typeToken() = object : TypeToken<T>() {}.type
 

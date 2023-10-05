@@ -4,7 +4,7 @@ agp = "7.3.0"
 #Gradle
 gradle = "7.5.0"
 #Kotlin
-kotlin = "1.7.10"
+kotlin = "1.9.10"
 #Moshi
 moshi = "1.13.0"
 #Coroutines
@@ -33,7 +33,7 @@ lifecycle = "2.5.1"
 #Navigation
 navigation = "2.5.2"
 #Dagger
-dagger = "2.43.2"
+dagger = "2.48"
 #Hilt
 hiltNavGraphViewModels = "1.0.0"
 #Javax

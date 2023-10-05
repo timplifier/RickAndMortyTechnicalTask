@@ -11,9 +11,6 @@ plugins {
 
     // Navigation SafeArgs
     id(libs.plugins.navigation.safeArgs.get().pluginId)
-
-    // Hilt
-    id(libs.plugins.hilt.android.get().pluginId)
 }
 
 android {
@@ -47,7 +44,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = options.versions.kotlinJvmTargetOptions.get()
+        jvmTarget = jvmOptions.versions.kotlinJvmTargetOptions.get()
     }
 
     //ViewBinding
@@ -74,7 +71,6 @@ dependencies {
     // Navigation
     implementation(libs.bundles.navigation)
 
-    // Hilt
-    implementation(libs.bundles.hilt)
-    kapt(libs.hilt.compiler)
+    // Dagger
+    kapt(libs.dagger.compiler)
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface EpisodeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertEpisodes(vararg episodes: EpisodeDto)
+    fun insertEpisodes(vararg episodes: EpisodeDto)
 
     @Query("SELECT * FROM episodedto WHERE url =:url")
     fun getSingleEpisode(url: String): Flow<EpisodeDto>

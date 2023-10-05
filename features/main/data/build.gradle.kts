@@ -38,7 +38,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = options.versions.kotlinJvmTargetOptions.get()
+        jvmTarget = jvmOptions.versions.kotlinJvmTargetOptions.get()
     }
     buildFeatures {
         viewBinding = true
@@ -60,4 +60,8 @@ dependencies {
     // Room
     api(libs.bundles.room)
     kapt(libs.room.compiler)
+
+    // Dagger
+    implementation(libs.dagger.dagger)
+    kapt(libs.dagger.compiler)
 }

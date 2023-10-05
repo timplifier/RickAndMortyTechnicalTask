@@ -6,13 +6,11 @@ import com.timplifier.domain.useCases.FetchSingleCharacterUseCase
 import com.timplifier.domain.useCases.GetSingleCharacterUseCase
 import com.timplifier.main.presentation.models.CharacterUI
 import com.timplifier.main.presentation.models.toUI
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class CharacterDetailViewModel @Inject constructor(
     private val fetchSingleCharacterUseCase: FetchSingleCharacterUseCase,
     private val getSingleCharacterUseCase: GetSingleCharacterUseCase

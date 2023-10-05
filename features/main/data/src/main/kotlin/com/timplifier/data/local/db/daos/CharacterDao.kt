@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacters(vararg characters: CharacterDto)
+    fun insertCharacters(vararg characters: CharacterDto)
 
     @Query(
         """ SELECT * FROM characterdto WHERE 
