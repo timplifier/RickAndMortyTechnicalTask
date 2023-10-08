@@ -1,10 +1,12 @@
 package com.timplifier.data.repositories
 
-import com.timplifier.data.base.makeNetworkRequest
+import com.timplifier.data.base.makeRequest
 import com.timplifier.data.local.db.daos.EpisodeDao
 import com.timplifier.data.remote.apiservices.EpisodeApiService
+import com.timplifier.domain.models.EpisodeModel
 import com.timplifier.domain.repositories.EpisodeRepository
-import kotlinx.coroutines.flow.map
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class EpisodeRepositoryImpl @Inject constructor(
@@ -12,12 +14,14 @@ class EpisodeRepositoryImpl @Inject constructor(
     private val episodeDao: EpisodeDao
 ) : EpisodeRepository {
 
-    override fun fetchSingleEpisode(id: Int) = makeNetworkRequest {
+    override fun fetchSingleEpisode(id: Int) = makeRequest {
         episodeApiService.fetchSingleEpisode(id).also {
-            episodeDao.insertEpisodes(it)
-        }.toDomain()
+            it.subscribeOn(Schedulers.io()).subscribe { result ->
+                episodeDao.insertEpisodes(result)
+            }
+        }.map { it.toDomain() }
     }
 
-    override fun getSingleEpisode(url: String) =
+    override fun getSingleEpisode(url: String): Observable<EpisodeModel> =
         episodeDao.getSingleEpisode(url).map { it.toDomain() }
 }

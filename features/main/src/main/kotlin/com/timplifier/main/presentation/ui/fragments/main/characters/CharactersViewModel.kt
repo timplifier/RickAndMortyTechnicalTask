@@ -1,6 +1,5 @@
 package com.timplifier.main.presentation.ui.fragments.main.characters
 
-import androidx.lifecycle.viewModelScope
 import com.timplifier.core.base.BaseViewModel
 import com.timplifier.domain.useCases.FetchCharactersUseCase
 import com.timplifier.domain.useCases.FetchSingleEpisodeUseCase
@@ -8,10 +7,9 @@ import com.timplifier.domain.useCases.GetCharactersUseCase
 import com.timplifier.domain.useCases.GetSingleEpisodeUseCase
 import com.timplifier.main.presentation.models.CharacterUI
 import com.timplifier.main.presentation.models.toUI
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class CharactersViewModel @Inject constructor(
@@ -22,11 +20,12 @@ class CharactersViewModel @Inject constructor(
 ) :
     BaseViewModel() {
 
-    private val _localCharactersState = MutableStateFlow<List<CharacterUI>>(emptyList())
-    val localCharactersState = _localCharactersState.asStateFlow()
+    private val _localCharactersState =
+        BehaviorSubject.createDefault<List<CharacterUI>>(emptyList())
+    val localCharactersState: Observable<List<CharacterUI>> = _localCharactersState
 
-    private val _searchQueryState = MutableStateFlow<String?>(null)
-    val searchQueryState = _searchQueryState.asStateFlow()
+    private val _searchQueryState = BehaviorSubject.createDefault("")
+    val searchQueryState: Observable<String?> = _searchQueryState
 
     fun fetchCharacters(
         status: String? = null,
@@ -50,16 +49,19 @@ class CharactersViewModel @Inject constructor(
         species: String? = null,
         gender: String? = null
     ) {
-        viewModelScope.launch {
-            getCharactersUseCase(_searchQueryState.value, status, species, gender).collectLatest {
-                _localCharactersState.value = it.map { characterModel -> characterModel.toUI() }
-            }
+        Observable.defer {
+            getCharactersUseCase(_searchQueryState.value, status, species, gender)
+                .map { it.map { characterModel -> characterModel.toUI() } }
         }
+            .subscribeOn(Schedulers.io())
+            .subscribe { localCharacters ->
+                _localCharactersState.onNext(localCharacters)
+            }
     }
 
     fun getSingleEpisode(url: String) = getSingleEpisodeUseCase(url)
 
-    fun modifySearchQuery(newQuery: String?) {
-        _searchQueryState.value = newQuery
+    fun modifySearchQuery(newQuery: String) {
+        _searchQueryState.onNext(newQuery)
     }
 }

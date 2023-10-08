@@ -1,14 +1,14 @@
 package com.timplifier.main.presentation.ui.fragments.main.characters.detail
 
-import androidx.lifecycle.viewModelScope
 import com.timplifier.core.base.BaseViewModel
+import com.timplifier.core.ui.state.UIState
 import com.timplifier.domain.useCases.FetchSingleCharacterUseCase
 import com.timplifier.domain.useCases.GetSingleCharacterUseCase
 import com.timplifier.main.presentation.models.CharacterUI
 import com.timplifier.main.presentation.models.toUI
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class CharacterDetailViewModel @Inject constructor(
@@ -16,20 +16,24 @@ class CharacterDetailViewModel @Inject constructor(
     private val getSingleCharacterUseCase: GetSingleCharacterUseCase
 ) : BaseViewModel() {
 
-    private val _characterState = mutableUiStateFlow<CharacterUI>()
-    val characterState = _characterState.asStateFlow()
+    private val _characterState = uiBehaviorSubject<CharacterUI>()
+    val characterState: Observable<UIState<CharacterUI>> = _characterState
 
-    private val _localCharacterState = MutableStateFlow<CharacterUI?>(null)
-    val localCharacterState = _localCharacterState.asStateFlow()
+    private val _localCharacterState =
+        BehaviorSubject.createDefault<CharacterUI?>(null)
+    val localCharacterState: Observable<CharacterUI> = _localCharacterState
 
-    fun fetchSingleCharacter(id: Int) =
+    fun fetchSingleCharacter(id: Int) {
         fetchSingleCharacterUseCase(id).gatherRequest(_characterState) { it.toUI() }
+    }
 
     fun getSingleCharacter(id: Int) {
-        viewModelScope.launch {
-            getSingleCharacterUseCase(id).collect {
-                _localCharacterState.value = it.toUI()
-            }
+        disposable.add(Observable.defer {
+            getSingleCharacterUseCase(id).map { characterModel -> characterModel.toUI() }
         }
+            .subscribeOn(Schedulers.io())
+            .subscribe { localCharacter ->
+                _localCharacterState.onNext(localCharacter)
+            })
     }
 }

@@ -33,7 +33,6 @@ import com.timplifier.main.databinding.FragmentCharactersBinding
 import com.timplifier.main.presentation.di.components.DaggerMainComponent
 import com.timplifier.main.presentation.models.toUI
 import com.timplifier.main.presentation.ui.adapters.CharactersAdapter
-import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 class CharactersFragment :
@@ -80,15 +79,13 @@ class CharactersFragment :
 
     private fun establishSearch() {
         binding.svCharacters.setOnQueryTextListener(object : OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    viewModel.modifySearchQuery(it)
-                }
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.modifySearchQuery(newText)
                 return false
             }
 
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.modifySearchQuery(query?.trim())
+            override fun onQueryTextSubmit(query: String): Boolean {
+                viewModel.modifySearchQuery(query.trim())
                 binding.svCharacters.clearFocus()
                 return false
             }
@@ -217,12 +214,11 @@ class CharactersFragment :
     }
 
     private fun subscribeToSearchQuery() {
-        safeFlowGather {
-            viewModel.searchQueryState.collectLatest {
-                it?.let {
-                    subscribeToFetchedOrLocalCharacters()
-                } ?: subscribeToFetchedOrLocalCharacters()
-            }
+        viewModel.searchQueryState.safeObservableGather {
+            this?.let {
+                subscribeToFetchedOrLocalCharacters()
+            } ?: subscribeToFetchedOrLocalCharacters()
+
             binding.tvNoneOfTheCharactersMatchingThisInputWereFound.isVisible =
                 charactersAdapter.itemCount == 0
         }
@@ -232,15 +228,13 @@ class CharactersFragment :
         viewModel.fetchCharacters(
             args.filter?.status, args.filter?.species, args.filter?.gender
         ).spectatePaging { pagingData ->
-            charactersAdapter.submitData(pagingData)
+            charactersAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
         }
     }
 
     private fun subscribeToLocalCharacters() {
-        safeFlowGather {
-            viewModel.localCharactersState.collectLatest {
-                charactersAdapter.submitData(PagingData.from(it))
-            }
+        viewModel.localCharactersState.safeObservableGather {
+            charactersAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.from(this))
         }
     }
 
@@ -257,21 +251,21 @@ class CharactersFragment :
             actionWhenConnected = {
                 tryToDoSomethingAndCatchNullPointerException {
                     viewModel.fetchSingleEpisode(getIdFromEpisodeUrl(episodeUrl))
-                        .safeFlowGather(actionIfEitherIsRight = {
+                        .safeObservableGather(actionIfEitherIsLeft = {
+                            loge(msg = this)
+                        }, actionIfEitherIsRight = {
                             charactersAdapter.renderCharacterFirstSeenIn(
                                 position,
-                                it.toUI().name
+                                toUI().name
                             )
-                        }, actionIfEitherIsLeft = {
-                            loge(msg = it)
                         })
                 }
             },
             actionWhenDisconnected = {
                 safeFlowGather {
                     tryToDoSomethingAndCatchNullPointerException {
-                        viewModel.getSingleEpisode(episodeUrl).collectLatest {
-                            it.toUI().name.let { name ->
+                        viewModel.getSingleEpisode(episodeUrl).safeObservableGather {
+                            toUI().name.let { name ->
                                 charactersAdapter.renderCharacterFirstSeenIn(position, name)
                             }
                         }

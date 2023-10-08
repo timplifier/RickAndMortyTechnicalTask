@@ -56,6 +56,7 @@ dependencies {
 
     // Paging
     api(libs.paging.paging)
+    api(libs.paging.rxjava2)
 
     // Room
     api(libs.bundles.room)

@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.timplifier.data.remote.dtos.CharacterDto
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.Observable
 
 @Dao
 interface CharacterDao {
@@ -24,8 +24,8 @@ interface CharacterDao {
         status: String?,
         species: String?,
         gender: String?
-    ): Flow<List<CharacterDto>>
+    ): Observable<List<CharacterDto>>
 
     @Query("SELECT * FROM characterdto WHERE id =:id")
-    fun getSingleCharacter(id: Int): Flow<CharacterDto>
+    fun getSingleCharacter(id: Int): Observable<CharacterDto>
 }

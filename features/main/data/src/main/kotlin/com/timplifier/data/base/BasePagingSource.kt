@@ -7,7 +7,7 @@ import com.timplifier.data.utils.DataMapper
 import retrofit2.HttpException
 import java.io.IOException
 
-private const val BASE_STARTING_PAGE_INDEX = 1
+const val BASE_STARTING_PAGE_INDEX = 1
 
 abstract class BasePagingSource<ValueDto : DataMapper<Value>, Value : Any>(
     private val request: suspend (position: Int) -> BasePagingResponse<ValueDto>,

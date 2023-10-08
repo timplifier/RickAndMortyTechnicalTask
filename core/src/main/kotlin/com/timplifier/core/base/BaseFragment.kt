@@ -14,6 +14,10 @@ import androidx.paging.PagingData
 import androidx.viewbinding.ViewBinding
 import com.timplifier.common.either.Either
 import com.timplifier.core.ui.state.UIState
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +29,8 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
     Fragment(layoutId) {
     protected abstract val binding: Binding
     protected abstract val viewModel: ViewModel
+
+    private val disposable = CompositeDisposable()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,6 +62,14 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
         }
     }
 
+    protected fun <T : Any> Flowable<PagingData<T>>.spectatePaging(
+        success: (data: PagingData<T>) -> Unit,
+    ) {
+        safeFlowableGather {
+            success(this)
+        }
+    }
+
     protected fun <T> StateFlow<UIState<T>>.spectateUiState(
         lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
         success: ((data: T) -> Unit)? = null,
@@ -75,6 +89,48 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
                 }
             }
         }
+    }
+
+    protected fun <T> Observable<UIState<T>>.spectateUiState(
+        success: ((data: T) -> Unit)? = null,
+        loading: ((data: UIState.Loading<T>) -> Unit)? = null,
+        error: ((error: String) -> Unit)? = null,
+        idle: ((idle: UIState.Idle<T>) -> Unit)? = null,
+        gatherIfSucceed: ((state: UIState<T>) -> Unit)? = null,
+    ) {
+        safeObservableGather {
+            gatherIfSucceed?.invoke(this)
+            when (this) {
+                is UIState.Idle -> idle?.invoke(this)
+                is UIState.Loading -> loading?.invoke(this)
+                is UIState.Error -> error?.invoke(this.error)
+                is UIState.Success -> success?.invoke(data)
+            }
+        }
+    }
+
+    fun <T> Observable<T>.safeObservableGather(success: T.() -> Unit) {
+        disposable.add(observeOn(AndroidSchedulers.mainThread()).subscribe {
+            success(it)
+        })
+    }
+
+    fun <T> Observable<Either<String, T>>.safeObservableGather(
+        actionIfEitherIsLeft: String.() -> Unit,
+        actionIfEitherIsRight: T.() -> Unit
+    ) {
+        disposable.add(observeOn(AndroidSchedulers.mainThread()).subscribe {
+            when (it) {
+                is Either.Left -> actionIfEitherIsLeft(it.value)
+                is Either.Right -> actionIfEitherIsRight(it.value)
+            }
+        })
+    }
+
+    fun <T> Flowable<T>.safeFlowableGather(success: T.() -> Unit) {
+        disposable.add(observeOn(AndroidSchedulers.mainThread()).subscribe {
+            success(it)
+        })
     }
 
     fun safeFlowGather(
@@ -123,5 +179,10 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        disposable.dispose()
+        super.onDestroyView()
     }
 }

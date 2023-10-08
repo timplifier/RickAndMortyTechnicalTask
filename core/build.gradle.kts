@@ -60,15 +60,13 @@ dependencies {
 
     // Coroutines
     api(libs.bundles.coroutines)
+    api(libs.bundles.rxjava.android)
 
     // Lifecycle
     api(libs.bundles.lifecycle)
 
     // Navigation
     api(libs.bundles.navigation)
-
-    // Paging 3
-    implementation(libs.paging.paging)
 
     // Dagger
     api(libs.dagger.dagger)

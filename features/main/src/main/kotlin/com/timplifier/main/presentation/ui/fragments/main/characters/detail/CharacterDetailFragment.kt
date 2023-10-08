@@ -1,6 +1,7 @@
 package com.timplifier.main.presentation.ui.fragments.main.characters.detail
 
 import android.content.Context
+import android.util.Log
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,6 @@ import com.timplifier.core.utils.ViewModelFactory
 import com.timplifier.main.R
 import com.timplifier.main.databinding.FragmentCharacterDetailBinding
 import com.timplifier.main.presentation.di.components.DaggerMainComponent
-import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 class CharacterDetailFragment :
@@ -28,46 +28,42 @@ class CharacterDetailFragment :
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
+
     private val args by navArgs<CharacterDetailFragmentArgs>()
+
     private val isConnectedToTheInternet: InternetConnectivityManager by lazy {
         InternetConnectivityManager(requireActivity())
     }
 
     override fun onAttach(context: Context) {
-        DaggerMainComponent.builder().context(context).build()
+        DaggerMainComponent.builder().context(context).build().inject(this)
         super.onAttach(context)
     }
 
     override fun launchObservers(): Unit = with(binding) {
         isConnectedToTheInternet.observe(viewLifecycleOwner) {
-            viewModel.apply {
-                when (it) {
-                    true -> {
-                        fetchSingleCharacter(args.characterId)
-                        characterState.spectateUiState(success = { character ->
-                            character.apply {
-                                imCharacter.loadImageWithGlide(image)
-                                tvCharacterName.text = name
-                                cpiCharacterDetail.isVisible =
-                                    image.isEmpty() && name.isEmpty()
-                            }
-                        })
-                    }
-
-                    else -> {
-                        getSingleCharacter(args.characterId)
-                        safeFlowGather {
-                            localCharacterState.collectLatest {
-                                it?.let { character ->
-                                    character.apply {
-                                        imCharacter.loadImageWithGlide(image)
-                                        tvCharacterName.text = name
-                                        cpiCharacterDetail.isVisible =
-                                            image.isEmpty() && name.isEmpty()
-                                    }
-                                }
-                            }
+            when (it) {
+                true -> {
+                    viewModel.fetchSingleCharacter(args.characterId)
+                    viewModel.characterState.spectateUiState(success = { character ->
+                        character.apply {
+                            imCharacter.loadImageWithGlide(image)
+                            tvCharacterName.text = name
+                            cpiCharacterDetail.isVisible =
+                                image.isEmpty() && name.isEmpty()
                         }
+                    }, error = { error ->
+                        Log.e("gaypop", error)
+                    })
+                }
+
+                else -> {
+                    viewModel.getSingleCharacter(args.characterId)
+                    viewModel.localCharacterState.safeObservableGather {
+                        imCharacter.loadImageWithGlide(image)
+                        tvCharacterName.text = name
+                        cpiCharacterDetail.isVisible =
+                            image.isEmpty() && name.isEmpty()
                     }
                 }
             }

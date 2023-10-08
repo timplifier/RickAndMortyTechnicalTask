@@ -49,6 +49,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide.glide)
+    implementation(libs.paging.rxjava2)
 
     // Dagger
     kapt(libs.dagger.compiler)
