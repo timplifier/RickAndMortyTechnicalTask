@@ -62,9 +62,6 @@ dependencies {
     // Core
     implementation(libs.android.core)
 
-    // Coroutines
-    implementation(libs.bundles.coroutines)
-
     // Lifecycle
     implementation(libs.bundles.lifecycle)
 

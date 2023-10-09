@@ -37,8 +37,6 @@ lifecycle = "2.5.1"
 navigation = "2.5.2"
 #Dagger
 dagger = "2.48"
-#Hilt
-hiltNavGraphViewModels = "1.0.0"
 #Javax
 javax = "1"
 #Retrofit
@@ -76,10 +74,6 @@ kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 #Moshi
 moshi-moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
-
-#Coroutines
-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 
 rxjava2 = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava2" }
 rxjava2-kotlin = { module = "io.reactivex.rxjava2:rxkotlin", version.ref = "rxjava2-kotlin" }
@@ -127,11 +121,6 @@ navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref 
 dagger-dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
-#Hilt
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
-hilt-viewModels = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hiltNavGraphViewModels" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
-
 #Javax
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax" }
 
@@ -150,7 +139,6 @@ okHttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "room" }
-room-kotlinExtensionsAndCoroutinesSupport = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 #Preferences and Datastore
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
@@ -183,22 +171,17 @@ koin-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.
 #UI Components
 uiComponents = ["ui-activity", "ui-fragment", "ui-appCompat", "ui-constraint", "ui-material", "ui-viewBindingPropertyDelegate", "ui-splashScreen"]
 
-#Coroutines
-coroutines = ["coroutines-core", "coroutines-android"]
 rxjava = ["rxjava2", "rxjava2-kotlin"]
 rxjava-android = ["rxjava2", "rxjava2-kotlin", "rxjava2-android"]
 
 #Room
-room = ["room-runtime", "room-kotlinExtensionsAndCoroutinesSupport", "room-rxjava2"]
+room = ["room-runtime", "room-rxjava2"]
 
 #Datastore
 datastore = ["datastore-preferences", "datastore-proto"]
 
 #Retrofit
 retrofit = ["retrofit-retrofit", "retrofit-rxjava2", "retrofit-gsonConverter"]
-
-#Hilt
-hilt = ["hilt-android", "hilt-viewModels"]
 
 #Koin
 koin = ["koin-android", "koin-workManager", "koin-navigation"]
@@ -229,9 +212,6 @@ kotlin-gradle = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 #Navigation
 navigation-safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
-
-#Hilt
-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 
 #Google Services
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }

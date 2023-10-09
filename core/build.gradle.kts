@@ -58,8 +58,7 @@ dependencies {
     // Core
     api(libs.android.core)
 
-    // Coroutines
-    api(libs.bundles.coroutines)
+    // RxJava2
     api(libs.bundles.rxjava.android)
 
     // Lifecycle

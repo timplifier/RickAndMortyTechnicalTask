@@ -7,6 +7,8 @@ import com.timplifier.data.utils.DataMapper
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
+const val BASE_STARTING_PAGE_INDEX = 0
+
 abstract class BaseRxPagingSource<ValueDto : DataMapper<Value>, Value : Any>(
     private val request: (position: Int) -> Single<BasePagingResponse<ValueDto>>,
 ) : RxPagingSource<Int, Value>() {
@@ -28,7 +30,7 @@ abstract class BaseRxPagingSource<ValueDto : DataMapper<Value>, Value : Any>(
             }
     }
 
-override fun getRefreshKey(state: PagingState<Int, Value>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Value>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)

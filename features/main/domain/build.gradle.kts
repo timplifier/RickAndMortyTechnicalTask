@@ -11,6 +11,5 @@ dependencies {
     api((project(":common")))
     api(libs.javax.inject)
     api(libs.bundles.rxjava)
-    api(libs.coroutines.core)
     implementation(libs.paging.common)
 }

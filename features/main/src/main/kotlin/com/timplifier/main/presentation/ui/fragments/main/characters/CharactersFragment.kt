@@ -262,29 +262,25 @@ class CharactersFragment :
                 }
             },
             actionWhenDisconnected = {
-                safeFlowGather {
-                    tryToDoSomethingAndCatchNullPointerException {
-                        viewModel.getSingleEpisode(episodeUrl).safeObservableGather {
-                            toUI().name.let { name ->
-                                charactersAdapter.renderCharacterFirstSeenIn(position, name)
-                            }
+                tryToDoSomethingAndCatchNullPointerException {
+                    viewModel.getSingleEpisode(episodeUrl).safeObservableGather {
+                        toUI().name.let { name ->
+                            charactersAdapter.renderCharacterFirstSeenIn(position, name)
                         }
                     }
                 }
             })
     }
 
-    private fun tryToDoSomethingAndCatchNullPointerException(action: suspend () -> Unit) {
-        safeFlowGather {
-            try {
-                action()
-            } catch (nullPointer: NullPointerException) {
-                loge(msg = nullPointer.message.toString())
-            } catch (indexOutOfBounds: IndexOutOfBoundsException) {
-                loge(msg = indexOutOfBounds.message.toString())
-            } catch (illegalState: IllegalStateException) {
-                loge(msg = illegalState.message.toString())
-            }
+    private fun tryToDoSomethingAndCatchNullPointerException(action: () -> Unit) {
+        try {
+            action()
+        } catch (nullPointer: NullPointerException) {
+            loge(msg = nullPointer.message.toString())
+        } catch (indexOutOfBounds: IndexOutOfBoundsException) {
+            loge(msg = indexOutOfBounds.message.toString())
+        } catch (illegalState: IllegalStateException) {
+            loge(msg = illegalState.message.toString())
         }
     }
 

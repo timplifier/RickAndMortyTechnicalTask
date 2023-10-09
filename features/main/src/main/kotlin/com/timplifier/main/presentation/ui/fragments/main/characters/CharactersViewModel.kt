@@ -49,14 +49,12 @@ class CharactersViewModel @Inject constructor(
         species: String? = null,
         gender: String? = null
     ) {
-        Observable.defer {
-            getCharactersUseCase(_searchQueryState.value, status, species, gender)
-                .map { it.map { characterModel -> characterModel.toUI() } }
-        }
+        disposable.add(getCharactersUseCase(_searchQueryState.value, status, species, gender)
+            .map { it.map { characterModel -> characterModel.toUI() } }
             .subscribeOn(Schedulers.io())
             .subscribe { localCharacters ->
                 _localCharactersState.onNext(localCharacters)
-            }
+            })
     }
 
     fun getSingleEpisode(url: String) = getSingleEpisodeUseCase(url)
