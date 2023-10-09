@@ -1,5 +1,6 @@
 package com.timplifier.data.base
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.rxjava2.flowable
@@ -43,6 +44,27 @@ fun <T> makeRequest(
     }
         .subscribeOn(Schedulers.io())
         .onErrorReturn { throwable ->
+            Either.Left(throwable.message ?: "Error Occurred!")
+        }
+}
+
+fun <T> makeRemoteRequest(
+    gatherIfSucceed: ((T) -> Unit)? = null,
+    request: () -> Observable<T>
+): Observable<Either<String, T>> {
+    return Observable.create<Either<String, T>> { emitter ->
+        request().subscribe({ result ->
+            gatherIfSucceed?.invoke(result)
+            emitter.onNext(Either.Right(value = result))
+            emitter.onComplete()
+        }, { throwable ->
+            emitter.onNext(Either.Left(throwable.message ?: "Error Occurred!"))
+            emitter.onComplete()
+        })
+    }
+        .subscribeOn(Schedulers.io())
+        .onErrorReturn { throwable ->
+            Log.e("gaypop", throwable.localizedMessage.toString() )
             Either.Left(throwable.message ?: "Error Occurred!")
         }
 }

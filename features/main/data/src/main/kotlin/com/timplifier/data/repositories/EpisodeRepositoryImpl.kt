@@ -1,6 +1,6 @@
 package com.timplifier.data.repositories
 
-import com.timplifier.data.base.makeRequest
+import com.timplifier.data.base.makeRemoteRequest
 import com.timplifier.data.local.db.daos.EpisodeDao
 import com.timplifier.data.remote.apiservices.EpisodeApiService
 import com.timplifier.domain.models.EpisodeModel
@@ -14,7 +14,7 @@ class EpisodeRepositoryImpl @Inject constructor(
     private val episodeDao: EpisodeDao
 ) : EpisodeRepository {
 
-    override fun fetchSingleEpisode(id: Int) = makeRequest {
+    override fun fetchSingleEpisode(id: Int) = makeRemoteRequest {
         episodeApiService.fetchSingleEpisode(id).also {
             it.subscribeOn(Schedulers.io()).subscribe { result ->
                 episodeDao.insertEpisodes(result)

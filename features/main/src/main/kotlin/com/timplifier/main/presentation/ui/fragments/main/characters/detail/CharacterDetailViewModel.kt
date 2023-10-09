@@ -20,7 +20,7 @@ class CharacterDetailViewModel @Inject constructor(
     val characterState: Observable<UIState<CharacterUI>> = _characterState
 
     private val _localCharacterState =
-        BehaviorSubject.createDefault<CharacterUI?>(null)
+        BehaviorSubject.create<CharacterUI?>()
     val localCharacterState: Observable<CharacterUI> = _localCharacterState
 
     fun fetchSingleCharacter(id: Int) {

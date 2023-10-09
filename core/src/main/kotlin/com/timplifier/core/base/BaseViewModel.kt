@@ -47,7 +47,6 @@ abstract class BaseViewModel : ViewModel() {
                         UIState.Success(mappedData(it.value))
                 }
             }
-
         }
     }
 
@@ -55,7 +54,7 @@ abstract class BaseViewModel : ViewModel() {
         observable: BehaviorSubject<UIState<S>>,
         mappedData: (data: T) -> S,
     ) {
-        subscribeOn(Schedulers.io()).subscribe { result ->
+        disposable.add(subscribeOn(Schedulers.io()).subscribe { result ->
             observable.onNext(UIState.Loading())
             when (result) {
                 is Either.Left -> observable.onNext(UIState.Error(result.value))
@@ -63,7 +62,7 @@ abstract class BaseViewModel : ViewModel() {
                     UIState.Success(mappedData(result.value))
                 )
             }
-        }
+        })
     }
 
     protected fun <T> Flow<Either<String, T>>.gatherRequest(
@@ -78,7 +77,6 @@ abstract class BaseViewModel : ViewModel() {
                         UIState.Success(it.value)
                 }
             }
-
         }
     }
 
@@ -94,7 +92,7 @@ abstract class BaseViewModel : ViewModel() {
     ) = map { it.map { data -> mappedData(data) } }.cachedIn(viewModelScope)
 
     override fun onCleared() {
-        super.onCleared()
         disposable.dispose()
+        super.onCleared()
     }
 }

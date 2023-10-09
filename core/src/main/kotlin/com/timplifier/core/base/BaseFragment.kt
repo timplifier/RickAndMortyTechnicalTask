@@ -30,7 +30,7 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
     protected abstract val binding: Binding
     protected abstract val viewModel: ViewModel
 
-    private val disposable = CompositeDisposable()
+    protected val disposable = CompositeDisposable()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

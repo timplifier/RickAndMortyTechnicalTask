@@ -21,6 +21,7 @@ class CharacterDetailFragment :
         R.layout.fragment_character_detail,
     ) {
     override val binding by viewBinding(FragmentCharacterDetailBinding::bind)
+
     override val viewModel by viewModels<CharacterDetailViewModel> {
         ViewModelProvider(this, viewModelFactory)[CharacterDetailViewModel::class.java]
         viewModelFactory
@@ -40,7 +41,7 @@ class CharacterDetailFragment :
         super.onAttach(context)
     }
 
-    override fun launchObservers(): Unit = with(binding) {
+    override fun launchObservers() = with(binding) {
         isConnectedToTheInternet.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {

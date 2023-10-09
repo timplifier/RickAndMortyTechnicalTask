@@ -1,6 +1,5 @@
 package com.timplifier.core.utils
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
@@ -18,7 +17,6 @@ class ViewModelFactory @Inject constructor(
         return try {
             creator.get() as T
         } catch (e: Exception) {
-            Log.e("gaypop", e.localizedMessage.toString())
             throw RuntimeException(e)
         }
     }
