@@ -73,4 +73,7 @@ dependencies {
     // Dagger
     api(libs.dagger.dagger)
     kapt(libs.dagger.compiler)
+
+    // Orbit
+    api(libs.bundles.orbit)
 }

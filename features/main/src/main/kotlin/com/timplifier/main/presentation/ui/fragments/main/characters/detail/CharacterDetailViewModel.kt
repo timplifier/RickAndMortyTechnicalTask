@@ -1,35 +1,49 @@
 package com.timplifier.main.presentation.ui.fragments.main.characters.detail
 
-import androidx.lifecycle.viewModelScope
+import com.timplifier.common.either.Either
 import com.timplifier.core.base.BaseViewModel
+import com.timplifier.core.ui.state.UIState
 import com.timplifier.domain.useCases.FetchSingleCharacterUseCase
 import com.timplifier.domain.useCases.GetSingleCharacterUseCase
-import com.timplifier.main.presentation.models.CharacterUI
+import com.timplifier.main.presentation.models.states.characterDetails.CharacterDetailsState
 import com.timplifier.main.presentation.models.toUI
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
 class CharacterDetailViewModel @Inject constructor(
     private val fetchSingleCharacterUseCase: FetchSingleCharacterUseCase,
     private val getSingleCharacterUseCase: GetSingleCharacterUseCase
-) : BaseViewModel() {
+) : BaseViewModel<CharacterDetailsState, Nothing>(CharacterDetailsState()) {
 
-    private val _characterState = mutableUiStateFlow<CharacterUI>()
-    val characterState = _characterState.asStateFlow()
+    fun fetchSingleCharacter(id: Int) = intent {
+        reduce {
+            state.copy(character = flow {
+                emit(UIState.Loading())
+                fetchSingleCharacterUseCase(id).collect {
+                    when (it) {
+                        is Either.Left -> {
+                            emit(UIState.Error(it.value))
+                        }
 
-    private val _localCharacterState = MutableStateFlow<CharacterUI?>(null)
-    val localCharacterState = _localCharacterState.asStateFlow()
+                        is Either.Right -> {
+                            emit(UIState.Success(it.value.toUI()))
+                        }
+                    }
+                }
+            })
+        }
+    }
 
-    fun fetchSingleCharacter(id: Int) =
-        fetchSingleCharacterUseCase(id).gatherRequest(_characterState) { it.toUI() }
-
-    fun getSingleCharacter(id: Int) {
-        viewModelScope.launch {
-            getSingleCharacterUseCase(id).collect {
-                _localCharacterState.value = it.toUI()
-            }
+    fun getSingleCharacter(id: Int) = intent {
+        reduce {
+            state.copy(character = flow {
+                emit(UIState.Loading())
+                getSingleCharacterUseCase(id).collect {
+                    emit(UIState.Success(it.toUI()))
+                }
+            })
         }
     }
 }

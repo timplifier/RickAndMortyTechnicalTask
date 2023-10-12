@@ -1,24 +1,45 @@
 package com.timplifier.main.presentation.ui.dialogs
 
+import android.content.Context
 import android.widget.RadioButton
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.timplifier.common.constants.Constants.CHARACTER_GENDER_QUERY
 import com.timplifier.common.constants.Constants.CHARACTER_SPECIES_QUERY
 import com.timplifier.common.constants.Constants.CHARACTER_STATUS_QUERY
-import com.timplifier.core.base.BaseDialogFragmentWithoutViewModel
+import com.timplifier.core.base.BaseDialogFragment
 import com.timplifier.core.extensions.directionsSafeNavigation
 import com.timplifier.core.extensions.setOnCheckedChangeListenerAndRetrieveItsText
+import com.timplifier.core.utils.ViewModelFactory
 import com.timplifier.main.R
 import com.timplifier.main.databinding.FragmentFilterDialogBinding
+import com.timplifier.main.presentation.di.components.DaggerMainComponent
 import com.timplifier.main.presentation.models.CharacterFilter
+import com.timplifier.main.presentation.models.states.filter.FilterSideEffect
+import org.orbitmvi.orbit.viewmodel.observe
+import javax.inject.Inject
 
 class FilterDialogFragment :
-    BaseDialogFragmentWithoutViewModel<FragmentFilterDialogBinding>(R.layout.fragment_filter_dialog) {
+    BaseDialogFragment<FragmentFilterDialogBinding, FilterViewModel>(R.layout.fragment_filter_dialog) {
     override val binding by viewBinding(FragmentFilterDialogBinding::bind)
+    override val viewModel by viewModels<FilterViewModel> {
+        ViewModelProvider(this, viewModelFactory)[FilterViewModel::class.java]
+        viewModelFactory
+    }
+
     private val characterFilter = CharacterFilter()
     private val args by navArgs<FilterDialogFragmentArgs>()
+
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelFactory
+
+    override fun onAttach(context: Context) {
+        DaggerMainComponent.builder().context(context).build().inject(this)
+        super.onAttach(context)
+    }
 
     override fun initialize() {
         modifyDialogCancellability()
@@ -64,24 +85,15 @@ class FilterDialogFragment :
         )
     }
 
-    private fun resetFilters() = with(binding) {
-        tvResetFilters.setOnClickListener {
-            rgStatus.clearCheck()
-            rgSpecies.clearCheck()
-            rgGender.clearCheck()
-            characterFilter.status = null
-            characterFilter.species = null
-            characterFilter.gender = null
+    private fun resetFilters() {
+        binding.tvResetFilters.setOnClickListener {
+            viewModel.resetFilters()
         }
     }
 
     private fun applyFilters() {
         binding.tvApplyFilters.setOnClickListener {
-            findNavController().directionsSafeNavigation(
-                FilterDialogFragmentDirections.actionFilterDialogFragmentToCharactersFragment(
-                    characterFilter
-                )
-            )
+            viewModel.applyFilters(characterFilter)
         }
     }
 
@@ -120,12 +132,41 @@ class FilterDialogFragment :
                     when (fieldToChange) {
                         CHARACTER_STATUS_QUERY ->
                             status = radioButtonText
+
                         CHARACTER_SPECIES_QUERY ->
                             species = radioButtonText
+
                         CHARACTER_GENDER_QUERY ->
                             gender = radioButtonText
                     }
                 }
+            }
+        }
+    }
+
+    override fun setupObservers() {
+        viewModel.observe(viewLifecycleOwner, sideEffect = ::handleSideEffect)
+    }
+
+    private fun handleSideEffect(filterSideEffect: FilterSideEffect) {
+        when (filterSideEffect) {
+            is FilterSideEffect.ApplyFilters -> {
+                findNavController().directionsSafeNavigation(
+                    FilterDialogFragmentDirections.actionFilterDialogFragmentToCharactersFragment(
+                        filterSideEffect.characterFilter
+                    )
+                )
+            }
+
+            FilterSideEffect.ResetFilters -> {
+                binding.apply {
+                    rgStatus.clearCheck()
+                    rgSpecies.clearCheck()
+                    rgGender.clearCheck()
+                }
+                characterFilter.status = null
+                characterFilter.species = null
+                characterFilter.gender = null
             }
         }
     }

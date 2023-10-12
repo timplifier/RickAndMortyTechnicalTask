@@ -11,10 +11,11 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseDialogFragmentWithoutViewModel<Binding : ViewBinding>(
+abstract class BaseDialogFragment<Binding : ViewBinding, ViewModel : androidx.lifecycle.ViewModel>(
     @LayoutRes private val layoutId: Int
 ) : AppCompatDialogFragment() {
     protected abstract val binding: Binding
+    protected abstract val viewModel: ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -31,6 +32,7 @@ abstract class BaseDialogFragmentWithoutViewModel<Binding : ViewBinding>(
         assembleViews()
         initialize()
         setupListeners()
+        setupObservers()
     }
 
     protected open fun initialize() {}
@@ -38,4 +40,6 @@ abstract class BaseDialogFragmentWithoutViewModel<Binding : ViewBinding>(
     protected open fun assembleViews() {}
 
     protected open fun setupListeners() {}
+
+    protected open fun setupObservers() {}
 }

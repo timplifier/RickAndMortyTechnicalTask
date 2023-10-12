@@ -3,6 +3,7 @@ package com.timplifier.main.presentation.di.components
 import android.content.Context
 import com.timplifier.core.di.modules.ViewModelModule
 import com.timplifier.main.presentation.di.modules.MainViewModelModule
+import com.timplifier.main.presentation.ui.dialogs.FilterDialogFragment
 import com.timplifier.main.presentation.ui.fragments.main.characters.CharactersFragment
 import com.timplifier.main.presentation.ui.fragments.main.characters.detail.CharacterDetailFragment
 import dagger.BindsInstance
@@ -18,6 +19,8 @@ interface MainComponent {
     fun inject(charactersFragment: CharactersFragment)
 
     fun inject(characterDetailFragment: CharacterDetailFragment)
+
+    fun inject(filterDialogFragment: FilterDialogFragment)
 
     @Component.Builder
     interface Builder {

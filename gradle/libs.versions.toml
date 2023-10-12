@@ -65,6 +65,8 @@ firebaseAdMob = "21.0.0"
 glide = "4.14.2"
 #Koin
 koin = "3.2.2"
+#Orbit
+orbit = "6.1.0"
 [libraries]
 
 #Kotlin
@@ -169,6 +171,9 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 koin-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 
+orbit-core = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit" }
+orbit-viewModel = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
+
 [bundles]
 #UI Components
 uiComponents = ["ui-activity", "ui-fragment", "ui-appCompat", "ui-constraint", "ui-material", "ui-viewBindingPropertyDelegate", "ui-splashScreen"]
@@ -205,7 +210,8 @@ firebase = ["firebase-firestore", "firebase-platform", "firebase-coroutines"]
 firebaseNoCrashlytics = ["firebase-firestore", "firebase-cloudStorage", "firebase-coroutines", "firebase-analytics", "firebase-auth", "firebase-cloudMessaging", "firebase-inAppMessaging", "firebase-inAppMessagingDisplay", "firebase-adMob"]
 firebaseNoAdMobAndCrashlytics = ["firebase-firestore", "firebase-cloudStorage", "firebase-coroutines", "firebase-analytics", "firebase-auth", "firebase-cloudMessaging", "firebase-inAppMessaging", "firebase-inAppMessagingDisplay"]
 
-
+#Orbit
+orbit = ["orbit-core", "orbit-viewModel"]
 [plugins]
 #AGP
 

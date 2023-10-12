@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
+abstract class BaseFragment<Binding : ViewBinding, ViewModel : androidx.lifecycle.ViewModel>(
     @LayoutRes layoutId: Int
 ) :
     Fragment(layoutId) {
@@ -57,6 +57,27 @@ abstract class BaseFragment<Binding : ViewBinding, ViewModel : BaseViewModel>(
     }
 
     protected fun <T> StateFlow<UIState<T>>.spectateUiState(
+        lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
+        success: ((data: T) -> Unit)? = null,
+        loading: ((data: UIState.Loading<T>) -> Unit)? = null,
+        error: ((error: String) -> Unit)? = null,
+        idle: ((idle: UIState.Idle<T>) -> Unit)? = null,
+        gatherIfSucceed: ((state: UIState<T>) -> Unit)? = null,
+    ) {
+        safeFlowGather(lifecycleState) {
+            collect {
+                gatherIfSucceed?.invoke(it)
+                when (it) {
+                    is UIState.Idle -> idle?.invoke(it)
+                    is UIState.Loading -> loading?.invoke(it)
+                    is UIState.Error -> error?.invoke(it.error)
+                    is UIState.Success -> success?.invoke(it.data)
+                }
+            }
+        }
+    }
+
+    protected fun <T> Flow<UIState<T>>.spectateUiState(
         lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
         success: ((data: T) -> Unit)? = null,
         loading: ((data: UIState.Loading<T>) -> Unit)? = null,
