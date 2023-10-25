@@ -34,9 +34,8 @@ import com.timplifier.main.databinding.FragmentCharactersBinding
 import com.timplifier.main.presentation.di.components.DaggerMainComponent
 import com.timplifier.main.presentation.models.states.characters.CharactersSideEffect
 import com.timplifier.main.presentation.models.states.characters.CharactersState
-import com.timplifier.main.presentation.models.toUI
+import com.timplifier.main.presentation.models.states.characters.CharactersTurn
 import com.timplifier.main.presentation.ui.adapters.CharactersAdapter
-import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.viewmodel.observe
 import javax.inject.Inject
 
@@ -88,7 +87,7 @@ class CharactersFragment :
                 newText?.let {
                     DebounceHandler.postDelayed(500) {
                         Log.e("gaypop", "invoked search")
-                        viewModel.modifySearchQuery(it)
+                        viewModel.processTurn(CharactersTurn.ModifySearchQuery(it))
                         subscribeToFetchedOrLocalCharacters()
                         binding.tvNoneOfTheCharactersMatchingThisInputWereFound.isVisible =
                             charactersAdapter.itemCount == 0
@@ -99,7 +98,7 @@ class CharactersFragment :
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 DebounceHandler.postDelayed(500) {
-                    viewModel.modifySearchQuery(query?.trim())
+                    viewModel.processTurn(CharactersTurn.ModifySearchQuery(query))
                     subscribeToFetchedOrLocalCharacters()
                     binding.tvNoneOfTheCharactersMatchingThisInputWereFound.isVisible =
                         charactersAdapter.itemCount == 0
@@ -133,7 +132,7 @@ class CharactersFragment :
             args.filter?.status = null
             args.filter?.species = null
             args.filter?.gender = null
-            viewModel.modifySearchQuery("")
+            viewModel.processTurn(CharactersTurn.ModifySearchQuery(""))
             rvCharacters.scrollToPosition(0)
             svCharacters.setQuery("", true)
             svCharacters.clearFocus()
@@ -149,7 +148,7 @@ class CharactersFragment :
 
     private fun openFilter() {
         binding.imFilter.setOnClickListener {
-            viewModel.navigateToFilterDialog(args.filter)
+            viewModel.postSideEffect(CharactersSideEffect.NavigationToFilterDialog(args.filter))
         }
     }
 
@@ -160,13 +159,13 @@ class CharactersFragment :
 
     private fun doNotShowNoInternetConnectionLayoutAnymore() = with(binding) {
         iNoInternet.tvDoNotShowAnymore.setOnClickListener {
-            viewModel.doNotShowAnymoreInternetConnectionLost()
+            viewModel.postSideEffect(CharactersSideEffect.DoNotShowAnymoreWhenNoInternetIsClicked)
         }
     }
 
     private fun closeNoInternetConnectionLayoutAndLoadSavedData() = with(binding) {
         iNoInternet.tvShowLocalData.setOnClickListener {
-            viewModel.showLocalDataWhenInternetConnectionLost()
+            viewModel.postSideEffect(CharactersSideEffect.ShowLocalDataWhenNoInternetIsClicked)
         }
     }
 
@@ -216,32 +215,26 @@ class CharactersFragment :
     }
 
     private fun onItemClick(id: Int) {
-        viewModel.navigateToCharactersDetails(id)
+        viewModel.postSideEffect(CharactersSideEffect.NavigationToCharacterDetails(id))
     }
 
     private fun fetchFirstSeenIn(position: Int, episodeUrl: String) {
         observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
             actionWhenConnected = {
                 tryToDoSomethingAndCatchNullPointerException {
-                    viewModel.fetchSingleEpisode(getIdFromEpisodeUrl(episodeUrl))
-                        .safeFlowGather(actionIfEitherIsRight = {
-                            charactersAdapter.renderCharacterFirstSeenIn(
-                                position,
-                                it.toUI().name
-                            )
-                        }, actionIfEitherIsLeft = {
-                            loge(msg = it)
-                        })
+                    viewModel.processTurn(
+                        CharactersTurn.FetchSingleEpisode(
+                            getIdFromEpisodeUrl(
+                                episodeUrl
+                            ), position
+                        )
+                    )
                 }
             },
             actionWhenDisconnected = {
                 safeFlowGather {
                     tryToDoSomethingAndCatchNullPointerException {
-                        viewModel.getSingleEpisode(episodeUrl).collectLatest {
-                            it.toUI().name.let { name ->
-                                charactersAdapter.renderCharacterFirstSeenIn(position, name)
-                            }
-                        }
+                        viewModel.processTurn(CharactersTurn.GetSingleEpisode(episodeUrl, position))
                     }
                 }
             })
@@ -289,6 +282,10 @@ class CharactersFragment :
         safeFlowGather {
             charactersAdapter.submitData(charactersState.characters)
         }
+        charactersAdapter.renderCharacterFirstSeenIn(
+            charactersState.episodePosition,
+            charactersState.episode?.name.toString()
+        )
     }
 
     private fun handleSideEffect(charactersSideEffect: CharactersSideEffect) {
@@ -319,12 +316,10 @@ class CharactersFragment :
     }
 
     private fun fetchCharacters() {
-        viewModel.fetchCharacters(
-            args.filter?.status, args.filter?.species, args.filter?.gender
-        )
+        viewModel.processTurn(CharactersTurn.FetchCharacters(args.filter))
     }
 
     private fun getLocalCharacters() {
-        viewModel.getLocalCharacters(args.filter?.status, args.filter?.species, args.filter?.gender)
+        viewModel.processTurn(CharactersTurn.GetCharacters(args.filter))
     }
 }

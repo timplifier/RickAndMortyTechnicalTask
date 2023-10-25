@@ -87,13 +87,13 @@ class FilterDialogFragment :
 
     private fun resetFilters() {
         binding.tvResetFilters.setOnClickListener {
-            viewModel.resetFilters()
+            viewModel.postSideEffect(FilterSideEffect.ResetFilters)
         }
     }
 
     private fun applyFilters() {
         binding.tvApplyFilters.setOnClickListener {
-            viewModel.applyFilters(characterFilter)
+            viewModel.postSideEffect(FilterSideEffect.ApplyFilters(characterFilter))
         }
     }
 

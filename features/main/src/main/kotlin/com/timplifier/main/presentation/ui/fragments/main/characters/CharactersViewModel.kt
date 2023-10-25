@@ -2,19 +2,19 @@ package com.timplifier.main.presentation.ui.fragments.main.characters
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.timplifier.core.base.BaseViewModel
+import com.timplifier.common.either.Either
+import com.timplifier.core.base.ViewModel
 import com.timplifier.domain.useCases.FetchCharactersUseCase
 import com.timplifier.domain.useCases.FetchSingleEpisodeUseCase
 import com.timplifier.domain.useCases.GetCharactersUseCase
 import com.timplifier.domain.useCases.GetSingleEpisodeUseCase
-import com.timplifier.main.presentation.models.CharacterFilter
 import com.timplifier.main.presentation.models.states.characters.CharactersSideEffect
 import com.timplifier.main.presentation.models.states.characters.CharactersState
+import com.timplifier.main.presentation.models.states.characters.CharactersTurn
 import com.timplifier.main.presentation.models.toUI
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
@@ -24,68 +24,77 @@ class CharactersViewModel @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase,
     private val getSingleEpisodeUseCase: GetSingleEpisodeUseCase
 ) :
-    BaseViewModel<CharactersState, CharactersSideEffect>(CharactersState()) {
+    ViewModel.TurnViewModel<CharactersState, CharactersTurn, CharactersSideEffect>(CharactersState()) {
 
-    fun navigateToCharactersDetails(characterId: Int) = intent {
-        postSideEffect(CharactersSideEffect.NavigationToCharacterDetails(characterId))
-    }
+    override fun processTurn(turn: CharactersTurn) {
+        intent {
+            when (turn) {
+                is CharactersTurn.FetchCharacters -> {
+                    fetchCharactersUseCase(
+                        state.searchQuery,
+                        turn.filter?.status,
+                        turn.filter?.species,
+                        turn.filter?.gender
+                    ).gatherPagingRequest {
+                        it.toUI()
+                    }.collectLatest {
+                        reduce {
+                            state.copy(characters = it)
+                        }
+                    }
+                }
 
-    fun navigateToFilterDialog(currentFilter: CharacterFilter?) = intent {
-        postSideEffect(CharactersSideEffect.NavigationToFilterDialog(currentFilter))
-    }
+                is CharactersTurn.FetchSingleEpisode -> {
+                    fetchSingleEpisodeUseCase(turn.id).collectLatest {
+                        when (it) {
+                            is Either.Left -> {}
+                            is Either.Right -> {
+                                reduce {
+                                    state.copy(
+                                        episode = it.value.toUI(),
+                                        episodePosition = turn.position
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
 
-    fun doNotShowAnymoreInternetConnectionLost() = intent {
-        postSideEffect(CharactersSideEffect.DoNotShowAnymoreWhenNoInternetIsClicked)
-    }
+                is CharactersTurn.GetCharacters -> {
+                    viewModelScope.launch {
+                        getCharactersUseCase(
+                            state.searchQuery,
+                            turn.filter?.status,
+                            turn.filter?.species,
+                            turn.filter?.gender
+                        ).collectLatest {
+                            reduce {
+                                state.copy(characters = PagingData.from(it.map { characterModel -> characterModel.toUI() }))
+                            }
+                        }
+                    }
+                }
 
-    fun showLocalDataWhenInternetConnectionLost() = intent {
-        postSideEffect(CharactersSideEffect.ShowLocalDataWhenNoInternetIsClicked)
-    }
+                is CharactersTurn.GetSingleEpisode -> {
+                    getSingleEpisodeUseCase(turn.url).collectLatest {
+                        reduce {
+                            state.copy(
+                                episode = it.toUI(),
+                                episodePosition = turn.position
+                            )
+                        }
+                    }
+                }
 
-    fun fetchCharacters(
-        status: String? = null,
-        species: String? = null,
-        gender: String? = null
-    ) = intent {
-        fetchCharactersUseCase(
-            state.searchQuery,
-            status,
-            species,
-            gender
-        ).gatherPagingRequest {
-            it.toUI()
-        }.collectLatest {
-            reduce {
-                state.copy(characters = it)
-            }
-        }
-    }
-
-    fun fetchSingleEpisode(id: Int) =
-        fetchSingleEpisodeUseCase(id)
-
-    fun getLocalCharacters(
-        status: String? = null,
-        species: String? = null,
-        gender: String? = null
-    ) = intent {
-        viewModelScope.launch {
-            getCharactersUseCase(state.searchQuery, status, species, gender).collectLatest {
-                reduce {
-                    state.copy(characters = PagingData.from(it.map { characterModel -> characterModel.toUI() }))
+                is CharactersTurn.ModifySearchQuery -> {
+                    reduce {
+                        state.copy(
+                            searchQuery = turn.query,
+                            characters = PagingData.empty()
+                        )
+                    }
                 }
             }
-        }
-    }
-
-    fun getSingleEpisode(url: String) = getSingleEpisodeUseCase(url)
-
-    fun modifySearchQuery(newQuery: String?) = intent {
-        reduce {
-            state.copy(
-                searchQuery = newQuery,
-                characters = PagingData.empty()
-            )
         }
     }
 }

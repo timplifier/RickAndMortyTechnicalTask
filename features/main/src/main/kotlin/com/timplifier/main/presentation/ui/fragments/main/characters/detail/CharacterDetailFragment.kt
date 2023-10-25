@@ -15,6 +15,7 @@ import com.timplifier.main.databinding.FragmentCharacterDetailBinding
 import com.timplifier.main.presentation.di.components.DaggerMainComponent
 import com.timplifier.main.presentation.models.CharacterUI
 import com.timplifier.main.presentation.models.states.characterDetails.CharacterDetailsState
+import com.timplifier.main.presentation.models.states.characterDetails.CharacterDetailsTurn
 import org.orbitmvi.orbit.viewmodel.observe
 import javax.inject.Inject
 
@@ -48,11 +49,11 @@ class CharacterDetailFragment :
         isConnectedToTheInternet.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {
-                    viewModel.fetchSingleCharacter(args.characterId)
+                    viewModel.processTurn(CharacterDetailsTurn.FetchSingleCharacter(args.characterId))
                 }
 
                 false -> {
-                    viewModel.getSingleCharacter(args.characterId)
+                    viewModel.processTurn(CharacterDetailsTurn.GetSingleCharacter(args.characterId))
                 }
             }
         }

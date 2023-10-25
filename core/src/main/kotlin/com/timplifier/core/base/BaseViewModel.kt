@@ -17,14 +17,13 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
 
-abstract class BaseViewModel<State : Any, SideEffect : Any>(initialState: State) :
-    ContainerHost<State, SideEffect>,
-    ViewModel() {
+sealed class ViewModel<State : Any, SideEffect : Any>(initialState: State) :
+    ContainerHost<State, SideEffect>, ViewModel() {
     protected fun <T> mutableUiStateFlow() = MutableStateFlow<UIState<T>>(UIState.Idle())
 
     override val container = container<State, SideEffect>(initialState = initialState)
 
-    fun postSideEffect(sideEffect: SideEffect)  = intent{
+    fun postSideEffect(sideEffect: SideEffect) = intent {
         postSideEffect(sideEffect)
     }
 
@@ -41,7 +40,6 @@ abstract class BaseViewModel<State : Any, SideEffect : Any>(initialState: State)
                         UIState.Success(mappedData(it.value))
                 }
             }
-
         }
     }
 
@@ -57,7 +55,6 @@ abstract class BaseViewModel<State : Any, SideEffect : Any>(initialState: State)
                         UIState.Success(it.value)
                 }
             }
-
         }
     }
 
@@ -66,4 +63,12 @@ abstract class BaseViewModel<State : Any, SideEffect : Any>(initialState: State)
     ) = map {
         it.map { data -> mappedData(data) }
     }.cachedIn(viewModelScope)
+
+    abstract class NoStateViewModel<SideEffect : Any> :
+        com.timplifier.core.base.ViewModel<Unit, SideEffect>(Unit)
+
+    abstract class TurnViewModel<State : Any, Turn : Any, SideEffect : Any>(initialState: State) :
+        com.timplifier.core.base.ViewModel<State, SideEffect>(initialState) {
+        abstract fun processTurn(turn: Turn)
+    }
 }
