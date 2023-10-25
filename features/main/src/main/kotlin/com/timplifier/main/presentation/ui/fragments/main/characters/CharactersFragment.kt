@@ -17,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.timplifier.core.base.BaseLoadStateAdapter
 import com.timplifier.core.base.BaseFragment
+import com.timplifier.core.base.BaseLoadStateAdapter
 import com.timplifier.core.extensions.bindViewsToPagingLoadStates
 import com.timplifier.core.extensions.directionsSafeNavigation
 import com.timplifier.core.extensions.gone

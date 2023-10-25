@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
 
 abstract class BaseViewModel<State : Any, SideEffect : Any>(initialState: State) :
@@ -21,6 +23,10 @@ abstract class BaseViewModel<State : Any, SideEffect : Any>(initialState: State)
     protected fun <T> mutableUiStateFlow() = MutableStateFlow<UIState<T>>(UIState.Idle())
 
     override val container = container<State, SideEffect>(initialState = initialState)
+
+    fun postSideEffect(sideEffect: SideEffect)  = intent{
+        postSideEffect(sideEffect)
+    }
 
     protected fun <T, S> Flow<Either<String, T>>.gatherRequest(
         state: MutableStateFlow<UIState<S>>,
