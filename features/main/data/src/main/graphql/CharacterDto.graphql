@@ -1,0 +1,5 @@
+query CharacterDto($id : ID!) {
+    character(id: $id) {
+        ...characterFragment
+    }
+}

@@ -7,7 +7,7 @@ sealed class CharactersSideEffect {
     data class NavigationToFilterDialog(val characterFilter: CharacterFilter? = null) :
         CharactersSideEffect()
 
-    data class NavigationToCharacterDetails(val characterId: Int) : CharactersSideEffect()
+    data class NavigationToCharacterDetails(val characterId: String) : CharactersSideEffect()
 
     data object DoNotShowAnymoreWhenNoInternetIsClicked : CharactersSideEffect()
 

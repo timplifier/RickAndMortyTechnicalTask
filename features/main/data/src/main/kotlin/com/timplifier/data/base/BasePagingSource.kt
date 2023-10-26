@@ -1,6 +1,5 @@
 package com.timplifier.data.base
 
-import android.net.Uri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.timplifier.data.utils.DataMapper
@@ -19,7 +18,7 @@ abstract class BasePagingSource<ValueDto : DataMapper<Value>, Value : Any>(
             val response = request(position)
             val nextPage = when (response.info.next) {
                 null -> null
-                else -> Uri.parse(response.info.next).getQueryParameter("page")?.toInt()
+                else -> response.info.next
             }
 
             LoadResult.Page(

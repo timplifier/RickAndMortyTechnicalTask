@@ -2,6 +2,7 @@ package com.timplifier.data.base
 
 
 import com.google.gson.annotations.SerializedName
+import com.timplifier.data.CharactersQuery
 
 data class BaseInfo(
     @SerializedName("count")
@@ -9,7 +10,9 @@ data class BaseInfo(
     @SerializedName("pages")
     val pages: Int,
     @SerializedName("next")
-    val next: String?,
+    val next: Int?,
     @SerializedName("prev")
-    val prev: String?
+    val prev: Int?
 )
+
+fun CharactersQuery.Info.toInfo() = BaseInfo(count, pages, next, prev)

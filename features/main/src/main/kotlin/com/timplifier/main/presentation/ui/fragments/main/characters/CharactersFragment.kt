@@ -3,7 +3,6 @@ package com.timplifier.main.presentation.ui.fragments.main.characters
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.net.Uri
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
@@ -23,7 +22,6 @@ import com.timplifier.core.extensions.bindViewsToPagingLoadStates
 import com.timplifier.core.extensions.directionsSafeNavigation
 import com.timplifier.core.extensions.gone
 import com.timplifier.core.extensions.invisible
-import com.timplifier.core.extensions.loge
 import com.timplifier.core.extensions.visible
 import com.timplifier.core.utils.DebounceHandler
 import com.timplifier.core.utils.InternetConnectivityManager
@@ -47,7 +45,7 @@ class CharactersFragment :
         viewModelFactory
     }
     private val args by navArgs<CharactersFragmentArgs>()
-    private val charactersAdapter = CharactersAdapter(this::onItemClick, this::fetchFirstSeenIn)
+    private val charactersAdapter = CharactersAdapter(this::onItemClick)
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
@@ -214,48 +212,9 @@ class CharactersFragment :
             })
     }
 
-    private fun onItemClick(id: Int) {
+    private fun onItemClick(id: String) {
         viewModel.postSideEffect(CharactersSideEffect.NavigationToCharacterDetails(id))
     }
-
-    private fun fetchFirstSeenIn(position: Int, episodeUrl: String) {
-        observeInternetConnectivityStatusAndDoSomethingWhenConnectedAndDisconnected(
-            actionWhenConnected = {
-                tryToDoSomethingAndCatchNullPointerException {
-                    viewModel.processTurn(
-                        CharactersTurn.FetchSingleEpisode(
-                            getIdFromEpisodeUrl(
-                                episodeUrl
-                            ), position
-                        )
-                    )
-                }
-            },
-            actionWhenDisconnected = {
-                safeFlowGather {
-                    tryToDoSomethingAndCatchNullPointerException {
-                        viewModel.processTurn(CharactersTurn.GetSingleEpisode(episodeUrl, position))
-                    }
-                }
-            })
-    }
-
-    private fun tryToDoSomethingAndCatchNullPointerException(action: suspend () -> Unit) {
-        safeFlowGather {
-            try {
-                action()
-            } catch (nullPointer: NullPointerException) {
-                loge(msg = nullPointer.message.toString())
-            } catch (indexOutOfBounds: IndexOutOfBoundsException) {
-                loge(msg = indexOutOfBounds.message.toString())
-            } catch (illegalState: IllegalStateException) {
-                loge(msg = illegalState.message.toString())
-            }
-        }
-    }
-
-    private fun getIdFromEpisodeUrl(episodeUrl: String) =
-        Uri.parse(episodeUrl).lastPathSegment.toString().toInt()
 
     private fun extractDataFromRoom() = with(binding) {
         if (iNoInternet.root.isVisible) {
@@ -282,10 +241,6 @@ class CharactersFragment :
         safeFlowGather {
             charactersAdapter.submitData(charactersState.characters)
         }
-        charactersAdapter.renderCharacterFirstSeenIn(
-            charactersState.episodePosition,
-            charactersState.episode?.name.toString()
-        )
     }
 
     private fun handleSideEffect(charactersSideEffect: CharactersSideEffect) {

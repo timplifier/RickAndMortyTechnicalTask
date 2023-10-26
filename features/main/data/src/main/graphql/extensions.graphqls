@@ -1,0 +1,7 @@
+extend type Info @nonnull(fields : "count, pages")
+extend type Character @nonnull(fields : "id, name, status, species, type, gender, origin, location, episode, image, created")
+extend type Query @nonnull(fields : "characters, character, episode")
+
+extend type Location @nonnull(fields : "name")
+extend type Episode @nonnull(fields : "id, name, air_date, episode, characters, created")
+extend type Characters @nonnull (fields : "info, results")

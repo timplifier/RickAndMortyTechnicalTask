@@ -13,7 +13,7 @@ interface CharacterRepository {
         gender: String?
     ): Flow<PagingData<CharacterModel>>
 
-    fun fetchSingleCharacter(id: Int): Flow<Either<String, CharacterModel>>
+    fun fetchSingleCharacter(id: String): Flow<Either<String, CharacterModel>>
 
     fun getLocalCharacters(
         name: String?,
@@ -22,5 +22,5 @@ interface CharacterRepository {
         gender: String?
     ): Flow<List<CharacterModel>>
 
-    fun getLocalSingleCharacter(id: Int): Flow<CharacterModel>
+    fun getLocalSingleCharacter(id: String): Flow<CharacterModel>
 }

@@ -2,13 +2,25 @@ package com.timplifier.data.base
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Query
+import com.apollographql.apollo3.network.okHttpClient
 import com.timplifier.common.either.Either
+import com.timplifier.data.remote.provideOkHttpClientBuilder
 import com.timplifier.data.utils.DataMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
+
+internal val apolloClient =
+    ApolloClient.Builder().serverUrl("https://rickandmortyapi.com/graphql")
+        .dispatcher(Dispatchers.IO).okHttpClient(provideOkHttpClientBuilder().build())
+        .build()
+
+internal suspend fun <T : Query.Data> ApolloClient.executeQuery(query: Query<T>) =
+    query(query).execute().dataAssertNoErrors
 
 internal fun <T> makeNetworkRequest(
     gatherIfSucceed: ((T) -> Unit)? = null,

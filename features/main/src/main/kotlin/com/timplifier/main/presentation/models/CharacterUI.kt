@@ -4,7 +4,7 @@ import com.timplifier.core.base.BaseDiffModel
 import com.timplifier.domain.models.CharacterModel
 
 data class CharacterUI(
-    override val id: Int,
+    override val id: String,
     val name: String,
     val status: String,
     val species: String,
@@ -12,12 +12,11 @@ data class CharacterUI(
     val gender: String,
     val origin: OriginUI,
     val location: LocationUI,
+    val episode: List<EpisodeUI>,
     val image: String,
-    val episode: List<String>,
-    val url: String,
     val created: String,
     var firstSeenInEpisode: String = ""
-) : BaseDiffModel<Int>
+) : BaseDiffModel<String>
 
 fun CharacterModel.toUI() = CharacterUI(
     id,
@@ -28,8 +27,7 @@ fun CharacterModel.toUI() = CharacterUI(
     gender,
     origin.toUI(),
     location.toUI(),
+    episode.map { it.toUI() },
     image,
-    episode,
-    url,
     created
 )

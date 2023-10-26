@@ -7,6 +7,7 @@ plugins {
 
     // Kapt
     id("kotlin-kapt")
+    id(libs.plugins.apollo.get().pluginId).version(libs.versions.apollo.get())
 }
 
 
@@ -64,4 +65,11 @@ dependencies {
     // Dagger
     implementation(libs.dagger.dagger)
     kapt(libs.dagger.compiler)
+    implementation(libs.apollo)
+}
+apollo {
+    service("service") {
+        packageName.set("com.timplifier.data")
+    }
+
 }

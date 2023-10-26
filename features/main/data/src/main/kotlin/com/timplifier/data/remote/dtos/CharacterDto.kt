@@ -4,6 +4,7 @@ package com.timplifier.data.remote.dtos
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.timplifier.data.fragment.CharacterFragment
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.CharacterModel
 
@@ -11,7 +12,7 @@ import com.timplifier.domain.models.CharacterModel
 data class CharacterDto(
     @SerializedName("id")
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
+    val id: String,
     @SerializedName("name")
     val name: String,
     @SerializedName("status")
@@ -26,12 +27,10 @@ data class CharacterDto(
     val origin: OriginDto,
     @SerializedName("location")
     val location: LocationDto,
+    @SerializedName("episode")
+    val episode: List<EpisodeDto>,
     @SerializedName("image")
     val image: String,
-    @SerializedName("episode")
-    val episode: List<String>,
-    @SerializedName("url")
-    val url: String,
     @SerializedName("created")
     val created: String
 ) : DataMapper<CharacterModel> {
@@ -45,9 +44,8 @@ data class CharacterDto(
         gender,
         origin.toDomain(),
         location.toDomain(),
+        episode.map { it.toDomain() },
         image,
-        episode,
-        url,
         created
     )
 }
@@ -61,8 +59,20 @@ fun CharacterModel.toData() = CharacterDto(
     gender,
     origin.toData(),
     location.toData(),
+    episode.map { it.toData() },
     image,
-    episode,
-    url,
     created
+)
+
+fun CharacterFragment.toData() = CharacterDto(
+    id,
+    name,
+    status,
+    species,
+    type,
+    gender,
+    origin.toData(),
+    location.toData(),
+    episode.map { it!!.toData() },
+    image, created
 )

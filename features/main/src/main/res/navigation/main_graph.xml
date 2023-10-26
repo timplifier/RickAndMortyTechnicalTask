@@ -31,7 +31,7 @@
         tools:layout="@layout/fragment_character_detail">
         <argument
             android:name="characterId"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
 
     <dialog

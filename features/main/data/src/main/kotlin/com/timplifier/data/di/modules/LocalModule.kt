@@ -22,9 +22,4 @@ object LocalModule {
     @Provides
     fun generateCharacterDao(rickAndMortyDatabase: RickAndMortyDatabase) =
         roomManager.generateCharacterDao(rickAndMortyDatabase)
-
-    @Singleton
-    @Provides
-    fun generateEpisodeDao(rickAndMortyDatabase: RickAndMortyDatabase) =
-        roomManager.generateEpisodeDao(rickAndMortyDatabase)
 }

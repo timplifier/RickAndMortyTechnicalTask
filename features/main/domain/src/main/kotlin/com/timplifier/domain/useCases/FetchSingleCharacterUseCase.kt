@@ -6,5 +6,5 @@ import javax.inject.Inject
 class FetchSingleCharacterUseCase @Inject constructor(
     private val characterRepository: CharacterRepository
 ) {
-    operator fun invoke(id: Int) = characterRepository.fetchSingleCharacter(id)
+    operator fun invoke(id: String) = characterRepository.fetchSingleCharacter(id)
 }

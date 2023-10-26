@@ -2,7 +2,6 @@ package com.timplifier.main.presentation.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.timplifier.core.base.BaseDiffUtil
@@ -12,8 +11,7 @@ import com.timplifier.main.databinding.ItemCharacterBinding
 import com.timplifier.main.presentation.models.CharacterUI
 
 class CharactersAdapter(
-    private val onItemClick: (id: Int) -> Unit,
-    private val fetchFirstSeenIn: (position: Int, episodeUrl: String) -> Unit
+    private val onItemClick: (id: String) -> Unit,
 ) :
     PagingDataAdapter<CharacterUI, CharactersAdapter.CharactersViewHolder>(BaseDiffUtil()) {
 
@@ -25,14 +23,6 @@ class CharactersAdapter(
 
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {
         getItem(position)?.let { holder.onBind(it) }
-    }
-
-    fun renderCharacterFirstSeenIn(position: Int, firstSeenIn: String) {
-        try {
-            getItem(position)?.firstSeenInEpisode = firstSeenIn
-            notifyItemChanged(position)
-        } catch (e: IndexOutOfBoundsException) {
-        }
     }
 
     inner class CharactersViewHolder(private val binding: ItemCharacterBinding) :
@@ -53,28 +43,14 @@ class CharactersAdapter(
                         species
                     )
                 tvLastKnownLocationName.text = location.name
-                tvFirstSeenInEpisode.text = episode.first()
-                fetchFirstSeenInIfAvailable(firstSeenInEpisode, episode.first())
+                tvFirstSeenInEpisode.text = episode.first().name
             }
         }
-
-        private fun fetchFirstSeenInIfAvailable(firstSeenIn: String, episodeUrl: String) =
-            with(binding) {
-                cpiFirstSeenInEpisode.isVisible = firstSeenIn.isEmpty()
-                tvFirstSeenInEpisode.isVisible = firstSeenIn.isNotEmpty()
-                when (firstSeenIn.isEmpty()) {
-                    true -> fetchFirstSeenIn(absoluteAdapterPosition, episodeUrl)
-                    false -> tvFirstSeenInEpisode.text = firstSeenIn
-                }
-            }
 
         init {
             binding.root.setOnClickListener {
                 getItem(absoluteAdapterPosition)?.let { character ->
                     onItemClick(character.id)
-                }
-                getItem(absoluteAdapterPosition)?.let { character ->
-                    fetchFirstSeenIn(absoluteAdapterPosition, character.episode.first())
                 }
             }
         }

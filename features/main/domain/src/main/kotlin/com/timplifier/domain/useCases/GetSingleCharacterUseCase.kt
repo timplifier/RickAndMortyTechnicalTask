@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetSingleCharacterUseCase @Inject constructor(
     private val characterRepository: CharacterRepository
 ) {
-    operator fun invoke(id: Int) = characterRepository.getLocalSingleCharacter(id)
+    operator fun invoke(id: String) = characterRepository.getLocalSingleCharacter(id)
 }

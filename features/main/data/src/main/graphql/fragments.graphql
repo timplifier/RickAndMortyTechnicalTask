@@ -1,0 +1,23 @@
+fragment characterFragment on Character {
+    id
+    name
+    status
+    species
+    type
+    gender
+    origin {
+        name
+    }
+    location {
+        name
+    }
+    episode {
+        id
+        name
+        airDate: air_date
+        episode
+        created
+    }
+    image
+    created
+}

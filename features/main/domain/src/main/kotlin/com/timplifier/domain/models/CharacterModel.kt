@@ -1,7 +1,7 @@
 package com.timplifier.domain.models
 
 data class CharacterModel(
-    val id: Int,
+    val id: String,
     val name: String,
     val status: String,
     val species: String,
@@ -9,8 +9,7 @@ data class CharacterModel(
     val gender: String,
     val origin: OriginModel,
     val location: LocationModel,
+    val episode: List<EpisodeModel>,
     val image: String,
-    val episode: List<String>,
-    val url: String,
     val created: String
 )

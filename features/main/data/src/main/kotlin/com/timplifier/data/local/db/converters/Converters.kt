@@ -3,6 +3,7 @@ package com.timplifier.data.local.db.converters
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.timplifier.data.remote.dtos.EpisodeDto
 import com.timplifier.data.remote.dtos.LocationDto
 import com.timplifier.data.remote.dtos.OriginDto
 
@@ -29,8 +30,8 @@ class Converters {
     fun toLocation(location: LocationDto): String = toJson(location)
 
     @TypeConverter
-    fun fromEpisode(value: String?) = fromJson<List<String>>(value)
+    fun fromEpisode(value: String?) = fromJson<List<EpisodeDto>>(value)
 
     @TypeConverter
-    fun toEpisode(episodes: List<String>): String = toJson(episodes)
+    fun toEpisode(episodes: List<EpisodeDto>): String = toJson(episodes)
 }
