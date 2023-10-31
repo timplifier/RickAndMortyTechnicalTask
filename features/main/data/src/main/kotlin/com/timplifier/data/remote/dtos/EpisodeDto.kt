@@ -3,26 +3,28 @@ package com.timplifier.data.remote.dtos
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.EpisodeModel
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity
 data class EpisodeDto(
-    @SerializedName("id")
+    @SerialName("id")
     @PrimaryKey(autoGenerate = false)
     val id: Int,
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
-    @SerializedName("air_date")
+    @SerialName("air_date")
     val airDate: String,
-    @SerializedName("episode")
+    @SerialName("episode")
     val episode: String,
-    @SerializedName("characters")
+    @SerialName("characters")
     val characters: List<String>,
-    @SerializedName("url")
+    @SerialName("url")
     val url: String,
-    @SerializedName("created")
+    @SerialName("created")
     val created: String
 ) : DataMapper<EpisodeModel> {
     override fun toDomain() = EpisodeModel(id, name, airDate, episode, characters, url, created)

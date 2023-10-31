@@ -6,33 +6,36 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.CharacterModel
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity
 data class CharacterDto(
-    @SerializedName("id")
+    @SerialName("id")
     @PrimaryKey(autoGenerate = false)
     val id: Int,
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
-    @SerializedName("status")
+    @SerialName("status")
     val status: String,
-    @SerializedName("species")
+    @SerialName("species")
     val species: String,
-    @SerializedName("type")
+    @SerialName("type")
     val type: String,
-    @SerializedName("gender")
+    @SerialName("gender")
     val gender: String,
-    @SerializedName("origin")
+    @SerialName("origin")
     val origin: OriginDto,
-    @SerializedName("location")
+    @SerialName("location")
     val location: LocationDto,
-    @SerializedName("image")
+    @SerialName("image")
     val image: String,
-    @SerializedName("episode")
+    @SerialName("episode")
     val episode: List<String>,
-    @SerializedName("url")
+    @SerialName("url")
     val url: String,
-    @SerializedName("created")
+    @SerialName("created")
     val created: String
 ) : DataMapper<CharacterModel> {
 

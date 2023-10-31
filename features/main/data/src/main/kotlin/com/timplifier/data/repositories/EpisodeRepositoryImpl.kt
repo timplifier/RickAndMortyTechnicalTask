@@ -13,9 +13,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 ) : EpisodeRepository {
 
     override fun fetchSingleEpisode(id: Int) = makeNetworkRequest {
-        episodeApiService.fetchSingleEpisode(id).also {
-            episodeDao.insertEpisodes(it)
-        }.toDomain()
+        episodeApiService.fetchSingleEpisode(id)
     }
 
     override fun getSingleEpisode(url: String) =

@@ -1,10 +1,13 @@
 package com.timplifier.data.remote.apiservices
 
+import com.timplifier.data.base.get
 import com.timplifier.data.remote.dtos.EpisodeDto
-import retrofit2.http.GET
-import retrofit2.http.Path
+import io.ktor.client.HttpClient
+import io.ktor.http.path
 
-interface EpisodeApiService {
-    @GET("api/episode/{id}")
-    suspend fun fetchSingleEpisode(@Path("id") id: Int): EpisodeDto
+class EpisodeApiService(private val httpClient: HttpClient) {
+    suspend fun fetchSingleEpisode(id: Int) =
+        get<EpisodeDto>(httpClient) {
+            path("api/episode/${id}")
+        }.toDomain()
 }

@@ -1,6 +1,8 @@
 package com.timplifier.data.di.modules
 
 import com.timplifier.data.remote.NetworkClient
+import com.timplifier.data.remote.apiservices.CharacterApiService
+import com.timplifier.data.remote.apiservices.EpisodeApiService
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -13,11 +15,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun generateCharactersApiService() =
-        networkClient.generateCharacterApiService()
+    fun generateCharactersApiService() = CharacterApiService(networkClient.httpClient)
 
     @Singleton
     @Provides
-    fun generateEpisodeApiService() =
-        networkClient.generateEpisodeApiService()
+    fun generateEpisodeApiService() = EpisodeApiService(networkClient.httpClient)
 }

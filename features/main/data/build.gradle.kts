@@ -7,6 +7,7 @@ plugins {
 
     // Kapt
     id("kotlin-kapt")
+    id(libs.plugins.kotlin.serialization.get().pluginId)
 }
 
 
@@ -48,11 +49,11 @@ android {
 dependencies {
     api(project(":features:main:domain"))
 
-    // Retrofit
-    implementation(libs.bundles.retrofit)
-
     // OkHttp
     implementation(libs.bundles.okHttp)
+
+    // Ktor
+    implementation(libs.bundles.ktor)
 
     // Paging
     api(libs.paging.paging)

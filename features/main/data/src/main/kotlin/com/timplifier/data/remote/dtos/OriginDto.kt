@@ -1,14 +1,16 @@
 package com.timplifier.data.remote.dtos
 
 
-import com.google.gson.annotations.SerializedName
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.OriginModel
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class OriginDto(
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
-    @SerializedName("url")
+    @SerialName("url")
     val url: String
 ) : DataMapper<OriginModel> {
     override fun toDomain() = OriginModel(name, url)

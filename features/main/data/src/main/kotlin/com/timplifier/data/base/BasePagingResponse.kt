@@ -1,11 +1,13 @@
 package com.timplifier.data.base
 
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BasePagingResponse<T>(
-    @SerializedName("info")
+    @SerialName("info")
     val info: BaseInfo,
-    @SerializedName("results")
+    @SerialName("results")
     val results: List<T>
 )

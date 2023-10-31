@@ -1,19 +1,30 @@
 package com.timplifier.data.remote
 
-import com.timplifier.data.remote.apiservices.CharacterApiService
-import com.timplifier.data.remote.apiservices.EpisodeApiService
-import retrofit2.Retrofit
+import com.timplifier.data.BuildConfig
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.resources.Resources
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class NetworkClient @Inject constructor() {
-    private val retrofit =
-        provideRetrofit(
-            provideOkHttpClientBuilder().build()
-        )
+    val httpClient = HttpClient(OkHttp) {
+        engine {
+            preconfigured = provideOkHttpClientBuilder().build()
+        }
+        defaultRequest {
+            url(BuildConfig.BASE_URL)
+        }
 
-    fun generateCharacterApiService(): CharacterApiService = retrofit.createAnApi()
-
-    fun generateEpisodeApiService(): EpisodeApiService = retrofit.createAnApi()
-
-    private inline fun <reified T : Any> Retrofit.createAnApi(): T = create(T::class.java)
+        install(Resources)
+        install(ContentNegotiation) {
+            json(Json {
+                isLenient = true
+                prettyPrint = true
+            })
+        }
+    }
 }

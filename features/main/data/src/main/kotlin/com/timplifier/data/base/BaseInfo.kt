@@ -1,15 +1,17 @@
 package com.timplifier.data.base
 
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BaseInfo(
-    @SerializedName("count")
+    @SerialName("count")
     val count: Int,
-    @SerializedName("pages")
+    @SerialName("pages")
     val pages: Int,
-    @SerializedName("next")
+    @SerialName("next")
     val next: String?,
-    @SerializedName("prev")
+    @SerialName("prev")
     val prev: String?
 )

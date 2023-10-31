@@ -32,7 +32,7 @@ class CharacterRepositoryImpl @Inject constructor(
         )
 
     override fun fetchSingleCharacter(id: Int) = makeNetworkRequest {
-        characterApiService.fetchSingleCharacter(id).toDomain()
+        characterApiService.fetchSingleCharacter(id)
     }
 
     override fun getLocalCharacters(

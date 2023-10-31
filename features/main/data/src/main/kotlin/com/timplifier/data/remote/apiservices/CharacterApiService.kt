@@ -1,21 +1,33 @@
 package com.timplifier.data.remote.apiservices
 
 import com.timplifier.data.base.BasePagingResponse
+import com.timplifier.data.base.get
+import com.timplifier.data.extensions.append
 import com.timplifier.data.remote.dtos.CharacterDto
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import io.ktor.client.HttpClient
+import io.ktor.http.path
+import io.ktor.util.StringValues
 
-interface CharacterApiService {
-    @GET("api/character")
+class CharacterApiService(private val httpClient: HttpClient) {
     suspend fun fetchCharacters(
-        @Query("page") page: Int,
-        @Query("name") name: String?,
-        @Query("status") status: String?,
-        @Query("species") species: String?,
-        @Query("gender") gender: String?
-    ): BasePagingResponse<CharacterDto>
+        page: Int,
+        name: String?,
+        status: String?,
+        species: String?,
+        gender: String?
+    ) = get<BasePagingResponse<CharacterDto>>(httpClient) {
+        path("api/character/")
+        parameters.appendAll(StringValues.build {
+            append("page", page)
+            append("name", name)
+            append("status", status)
+            append("species", species)
+            append("gender", gender)
+        })
+    }
 
-    @GET("api/character/{id}")
-    suspend fun fetchSingleCharacter(@Path("id") id: Int): CharacterDto
+    suspend fun fetchSingleCharacter(id: Int) =
+        get<CharacterDto>(httpClient) {
+            path("api/character/${id}/")
+        }.toDomain()
 }
