@@ -3,7 +3,6 @@ package com.timplifier.data.remote.dtos
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.CharacterModel
 import kotlinx.serialization.SerialName

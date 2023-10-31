@@ -1,4 +1,6 @@
 [versions]
+#Google
+google-gson = "2.10.1"
 #AGP
 agp = "7.3.0"
 #Gradle
@@ -70,12 +72,10 @@ koin = "3.2.2"
 orbit = "6.1.0"
 [libraries]
 
+# Google
+google-gson = { module = "com.google.code.gson:gson", version.ref = "google-gson" }
 #Kotlin
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-
-#Moshi
-moshi-moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
-
 
 #Coroutines
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

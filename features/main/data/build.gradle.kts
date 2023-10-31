@@ -55,6 +55,9 @@ dependencies {
     // Ktor
     implementation(libs.bundles.ktor)
 
+    // Gson
+    implementation(libs.google.gson)
+
     // Paging
     api(libs.paging.paging)
 

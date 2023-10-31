@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.timplifier.data.utils.DataMapper
-import retrofit2.HttpException
+import io.ktor.client.plugins.ClientRequestException
 import java.io.IOException
 
 private const val BASE_STARTING_PAGE_INDEX = 1
@@ -29,7 +29,7 @@ abstract class BasePagingSource<ValueDto : DataMapper<Value>, Value : Any>(
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: ClientRequestException) {
             LoadResult.Error(exception)
         }
     }
