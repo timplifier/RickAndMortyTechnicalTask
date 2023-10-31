@@ -8,6 +8,7 @@ plugins {
     // Kapt
     id("kotlin-kapt")
     id(libs.plugins.kotlin.serialization.get().pluginId)
+    id(libs.plugins.realm.get().pluginId)
 }
 
 
@@ -58,9 +59,8 @@ dependencies {
     // Paging
     api(libs.paging.paging)
 
-    // Room
-    api(libs.bundles.room)
-    kapt(libs.room.compiler)
+    // Realm
+    implementation(libs.bundles.realm)
 
     // Dagger
     implementation(libs.dagger.dagger)

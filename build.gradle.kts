@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.agp.library) apply false
     alias(libs.plugins.kotlin.gradle) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.realm) apply false
     alias(libs.plugins.navigation.safeArgs) apply false
 }
 tasks.register("clean", Delete::class) {

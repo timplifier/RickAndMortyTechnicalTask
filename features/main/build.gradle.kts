@@ -10,6 +10,7 @@ plugins {
 
     // Safe Args
     id(libs.plugins.navigation.safeArgs.get().pluginId)
+    id(libs.plugins.kotlin.serialization.get().pluginId)
 }
 
 

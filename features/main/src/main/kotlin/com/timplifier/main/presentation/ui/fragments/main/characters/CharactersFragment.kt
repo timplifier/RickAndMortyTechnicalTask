@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
-import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -86,7 +85,6 @@ class CharactersFragment :
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
                     DebounceHandler.postDelayed(500) {
-                        Log.e("gaypop", "invoked search")
                         viewModel.processTurn(CharactersTurn.ModifySearchQuery(it))
                         subscribeToFetchedOrLocalCharacters()
                         binding.tvNoneOfTheCharactersMatchingThisInputWereFound.isVisible =

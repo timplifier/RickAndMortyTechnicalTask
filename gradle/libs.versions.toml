@@ -35,16 +35,10 @@ lifecycle = "2.5.1"
 navigation = "2.5.2"
 #Dagger
 dagger = "2.48"
-#Hilt
-hiltNavGraphViewModels = "1.0.0"
 #Javax
 javax = "1"
-#Retrofit
-retrofit = "2.9.0"
 #OkHttp
 okHttp = "5.0.0-alpha.10"
-#Room
-room = "2.4.3"
 #Datastore
 datastore = "1.0.0"
 #Paging
@@ -68,6 +62,8 @@ glide = "4.14.2"
 koin = "3.2.2"
 #Orbit
 orbit = "6.1.0"
+# Realm
+realm = "1.11.0"
 [libraries]
 
 #Kotlin
@@ -136,10 +132,9 @@ okHttp-okHttp = { module = "com.squareup.okhttp3:okhttp" }
 okHttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okHttp" }
 okHttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
 
-#Room
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-kotlinExtensionsAndCoroutinesSupport = { module = "androidx.room:room-ktx", version.ref = "room" }
+# Realm
+realm-base = { module = "io.realm.kotlin:library-base", version.ref = "realm" }
+realm-sync = { module = "io.realm.kotlin:library-sync", version.ref = "realm" }
 
 #Preferences and Datastore
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
@@ -172,8 +167,8 @@ uiComponents = ["ui-activity", "ui-fragment", "ui-appCompat", "ui-constraint", "
 #Coroutines
 coroutines = ["coroutines-core", "coroutines-android"]
 
-#Room
-room = ["room-runtime", "room-kotlinExtensionsAndCoroutinesSupport"]
+#Realm
+realm = ["realm-base", "realm-sync"]
 
 #Datastore
 datastore = ["datastore-preferences", "datastore-proto"]
@@ -216,3 +211,5 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 
 #Firebase
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
+# Realm
+realm = { id = "io.realm.kotlin", version.ref = "realm" }

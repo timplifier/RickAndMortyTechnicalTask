@@ -1,18 +1,17 @@
 package com.timplifier.data.remote.dtos
 
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.timplifier.data.local.db.dtos.EpisodeRealmDto
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.EpisodeModel
+import io.realm.kotlin.ext.toRealmList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.mongodb.kbson.ObjectId
 
 @Serializable
-@Entity
-data class EpisodeDto(
+class EpisodeDto(
     @SerialName("id")
-    @PrimaryKey(autoGenerate = false)
     val id: Int,
     @SerialName("name")
     val name: String,
@@ -27,7 +26,17 @@ data class EpisodeDto(
     @SerialName("created")
     val created: String
 ) : DataMapper<EpisodeModel> {
+
     override fun toDomain() = EpisodeModel(id, name, airDate, episode, characters, url, created)
 }
 
-fun EpisodeModel.toData() = EpisodeDto(id, name, airDate, episode, characters, url, created)
+fun EpisodeDto.toRealm() = EpisodeRealmDto(
+    id,
+    ObjectId.invoke(),
+    name,
+    airDate,
+    episode,
+    characters.toRealmList(),
+    url,
+    created
+)

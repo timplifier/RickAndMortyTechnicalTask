@@ -2,16 +2,15 @@ package com.timplifier.data.repositories
 
 import com.timplifier.data.base.makeNetworkRequest
 import com.timplifier.data.base.makePagingRequest
-import com.timplifier.data.local.db.daos.CharacterDao
+import com.timplifier.data.local.db.realms.CharacterRealm
 import com.timplifier.data.remote.apiservices.CharacterApiService
 import com.timplifier.data.remote.pagingSources.CharactersPagingSource
 import com.timplifier.domain.repositories.CharacterRepository
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CharacterRepositoryImpl @Inject constructor(
     private val characterApiService: CharacterApiService,
-    private val characterDao: CharacterDao
+    private val characterRealm: CharacterRealm,
 ) : CharacterRepository {
 
     override fun fetchCharacters(
@@ -23,7 +22,7 @@ class CharacterRepositoryImpl @Inject constructor(
         makePagingRequest(
             CharactersPagingSource(
                 characterApiService,
-                characterDao,
+                characterRealm,
                 name,
                 status,
                 species,
@@ -41,9 +40,8 @@ class CharacterRepositoryImpl @Inject constructor(
         species: String?,
         gender: String?
     ) =
-        characterDao.getCharacters(name, status, species, gender)
-            .map { charactersDto -> charactersDto.map { it.toDomain() } }
+        characterRealm.queryCharacters(name, status, species, gender)
 
     override fun getLocalSingleCharacter(id: Int) =
-        characterDao.getSingleCharacter(id).map { it.toDomain() }
+        characterRealm.queryCharacter(id)
 }

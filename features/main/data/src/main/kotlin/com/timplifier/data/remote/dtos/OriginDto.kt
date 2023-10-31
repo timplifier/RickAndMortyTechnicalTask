@@ -1,6 +1,7 @@
 package com.timplifier.data.remote.dtos
 
 
+import com.timplifier.data.local.db.dtos.OriginRealmDto
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.OriginModel
 import kotlinx.serialization.SerialName
@@ -16,4 +17,6 @@ data class OriginDto(
     override fun toDomain() = OriginModel(name, url)
 }
 
-fun OriginModel.toData() = OriginDto(name, url)
+fun OriginDto.toRealm() = OriginRealmDto(
+    name, url
+)

@@ -1,19 +1,17 @@
 package com.timplifier.data.remote.dtos
 
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
+import com.timplifier.data.local.db.dtos.CharacterRealmDto
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.CharacterModel
+import io.realm.kotlin.ext.toRealmList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.mongodb.kbson.ObjectId
 
 @Serializable
-@Entity
 data class CharacterDto(
     @SerialName("id")
-    @PrimaryKey(autoGenerate = false)
     val id: Int,
     @SerialName("name")
     val name: String,
@@ -55,17 +53,18 @@ data class CharacterDto(
     )
 }
 
-fun CharacterModel.toData() = CharacterDto(
+fun CharacterDto.toRealm() = CharacterRealmDto(
+    ObjectId.invoke(),
     id,
     name,
     status,
     species,
     type,
     gender,
-    origin.toData(),
-    location.toData(),
+    origin.toRealm(),
+    location.toRealm(),
     image,
-    episode,
+    episode.toRealmList(),
     url,
     created
 )

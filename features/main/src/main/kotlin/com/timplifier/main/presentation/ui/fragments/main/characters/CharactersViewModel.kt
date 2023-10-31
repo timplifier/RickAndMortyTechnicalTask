@@ -47,7 +47,9 @@ class CharactersViewModel @Inject constructor(
                 is CharactersTurn.FetchSingleEpisode -> {
                     fetchSingleEpisodeUseCase(turn.id).collectLatest {
                         when (it) {
-                            is Either.Left -> {}
+                            is Either.Left -> {
+                            }
+
                             is Either.Right -> {
                                 reduce {
                                     state.copy(

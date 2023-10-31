@@ -9,5 +9,5 @@ class EpisodeApiService(private val httpClient: HttpClient) {
     suspend fun fetchSingleEpisode(id: Int) =
         get<EpisodeDto>(httpClient) {
             path("api/episode/${id}")
-        }.toDomain()
+        }
 }

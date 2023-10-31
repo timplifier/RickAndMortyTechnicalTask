@@ -1,6 +1,7 @@
 package com.timplifier.data.remote.dtos
 
 
+import com.timplifier.data.local.db.dtos.LocationRealmDto
 import com.timplifier.data.utils.DataMapper
 import com.timplifier.domain.models.LocationModel
 import kotlinx.serialization.SerialName
@@ -16,4 +17,6 @@ data class LocationDto(
     override fun toDomain() = LocationModel(name, url)
 }
 
-fun LocationModel.toData() = LocationDto(name, url)
+fun LocationDto.toRealm() = LocationRealmDto(
+    name, url
+)
