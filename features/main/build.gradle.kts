@@ -52,4 +52,5 @@ dependencies {
 
     // Dagger
     kapt(libs.dagger.compiler)
+    implementation(libs.google.gson)
 }

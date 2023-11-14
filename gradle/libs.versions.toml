@@ -1,6 +1,7 @@
 [versions]
 #Google
 google-gson = "2.10.1"
+google-truth = "1.1.5"
 #AGP
 agp = "7.3.0"
 #Gradle
@@ -70,16 +71,23 @@ glide = "4.14.2"
 koin = "3.2.2"
 #Orbit
 orbit = "6.1.0"
+#Junit
+junit = "4.13.2"
+junit-androidx = "1.1.5"
+espresso = "3.5.1"
+turbine = "1.0.0"
 [libraries]
 
 # Google
 google-gson = { module = "com.google.code.gson:gson", version.ref = "google-gson" }
+google-truth = { module = "com.google.truth:truth", version.ref = "google-truth" }
 #Kotlin
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 #Coroutines
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 #Arrow
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
@@ -164,6 +172,12 @@ firebase-adMob = { module = "com.google.android.gms:play-services-ads", version.
 
 orbit-core = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit" }
 orbit-viewModel = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+junit-androidx = { module = "androidx.test.ext:junit", version.ref = "junit-androidx" }
+junit-androidx-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "junit-androidx" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
 #UI Components

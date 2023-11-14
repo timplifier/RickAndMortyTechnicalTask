@@ -68,4 +68,15 @@ dependencies {
     // Dagger
     implementation(libs.dagger.dagger)
     kapt(libs.dagger.compiler)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.google.truth)
+    testImplementation(libs.turbine)
+    androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.junit.androidx.ktx)
+    androidTestImplementation(libs.junit.androidx)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.google.truth)
+    androidTestImplementation(libs.turbine)
 }
