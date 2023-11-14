@@ -60,6 +60,7 @@ dependencies {
 
     // Paging
     api(libs.paging.paging)
+    implementation(libs.paging.testing)
 
     // Room
     api(libs.bundles.room)

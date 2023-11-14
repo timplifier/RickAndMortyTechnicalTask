@@ -72,7 +72,6 @@ class CharacterDaoTest {
         insertCharacters(
             nameQueryParameter = "Rick"
         ) { characters ->
-            println(characters.toString())
             assertEquals(
                 characters.filter { character -> character.name.contains("Rick") },
                 awaitItem()
@@ -91,6 +90,16 @@ class CharacterDaoTest {
     }
 
     @Test
+    fun insertCharactersAndQueryBySpecies() {
+        insertCharacters(speciesQueryParameter = "Alien") { characters ->
+            assertEquals(
+                characters.filter { character -> character.species == "Alien" },
+                awaitItem()
+            )
+        }
+    }
+
+    @Test
     fun insertCharactersAndQueryByGender() {
         insertCharacters(
             genderQueryParameter = "unknown"
@@ -98,16 +107,6 @@ class CharacterDaoTest {
             println(characters.toString())
             assertEquals(
                 characters.filter { character -> character.gender == "unknown" },
-                awaitItem()
-            )
-        }
-    }
-
-    @Test
-    fun insertCharactersAndQueryBySpecies() {
-        insertCharacters(speciesQueryParameter = "Alien") { characters ->
-            assertEquals(
-                characters.filter { character -> character.species == "Alien" },
                 awaitItem()
             )
         }

@@ -1,5 +1,8 @@
 package com.timplifier.domain.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class CharacterModel(
     val id: Int,
     val name: String,
